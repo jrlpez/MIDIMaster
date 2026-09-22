@@ -28,6 +28,11 @@ assert.deepEqual(shown[0], ["Controller", "Controller Out", { routeCount: 1, rou
 handler.handle({ state: "connected", routes: [] });
 assert.equal(statusElement.textContent, "midi.connected");
 
+handler.handle({ state: "connected", routes: [route], reason: "start_partial" });
+assert.equal(statusElement.textContent, "midi.partialRetrying", "late native status preserves recovery state");
+handler.handle({ state: "failed", routes: [], reason: "start_partial" });
+assert.equal(statusElement.textContent, "midi.partialRetrying");
+
 handler.handle({ state: "failed", reason: "unavailable" });
 assert.equal(statusElement.textContent, "midi.connectFailed:unavailable");
 handler.handle({ state: "disconnected", routes: [] });

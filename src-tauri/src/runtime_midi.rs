@@ -122,7 +122,7 @@ pub(crate) fn apply_midi_event(
         .midi
         .lock()
         .map(|midi| midi.active_route_count() <= 1)
-        .unwrap_or(true);
+        .unwrap_or(false);
     let binding = match profile.find_binding(&key, allow_stale_device_fallback) {
         Some(binding) => binding,
         None => {

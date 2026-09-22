@@ -3,7 +3,6 @@ import { readRenderedBindingValue } from "../performance_rendered_value.js";
 import { parseEventPayload } from "../event_payload.js";
 import { t } from "../i18n.js";
 import { fromOsdSettings } from "../../core/osd_settings.js";
-import { applyBindingDeviceMigrations } from "../../core/midi_preferences.js";
 import { setBindingTargets, getBindingTargets, getPrimaryBindingTarget } from "../../core/binding_model.js";
 
 /** backend events workflow. */
@@ -72,51 +71,8 @@ export function createBackendEvents({
       applyOsdAppearanceAttributes(osdState.settings);
     });
 
-    await eventSubscriptions.subscribe("bindings_migrated", (event) => {
-      const payload = parseEventPayload(event);
-      const count = Number(payload?.count || 0);
-      if (!Number.isFinite(count) || count <= 0) {
-        return;
-      }
-
-      const migrations = Array.isArray(payload?.migrations) ? payload.migrations : [];
-      if (migrations.length > 0) {
-        const parsedMigrations = migrations
-          .map((migration) => {
-            const bindingId = String(migration?.bindingId || migration?.binding_id || "");
-            const deviceId = String(migration?.deviceId || migration?.device_id || "");
-            const previousDeviceId = String(
-              migration?.previousDeviceId || migration?.previous_device_id || "",
-            );
-            if (!bindingId || !deviceId) return null;
-            return { bindingId, deviceId, previousDeviceId };
-          })
-          .filter(Boolean);
-        if (parsedMigrations.length === 0) return;
-
-        profileState.bindings = (profileState.bindings || []).map((binding) =>
-          applyBindingDeviceMigrations(binding, parsedMigrations),
-        );
-        requestBindingsRerender("bindings_migrated");
-        return;
-      }
-
-      const deviceId = payload?.device_id;
-      if (!deviceId) {
-        return;
-      }
-
-      const migrateAuxControl = (control) =>
-        control && typeof control === "object" ? { ...control, device_id: deviceId } : control;
-      profileState.bindings = (profileState.bindings || []).map((binding) => ({
-        ...binding,
-        device_id: deviceId,
-        mute_control: migrateAuxControl(binding?.mute_control),
-        assign_control: migrateAuxControl(binding?.assign_control),
-        indicator_control: migrateAuxControl(binding?.indicator_control),
-      }));
-      requestBindingsRerender("bindings_migrated");
-    });
+    // MIDI reconciliation is applied from the command response before saves
+    // resume. A delayed legacy bindings_migrated event must not replay a swap.
 
     await eventSubscriptions.subscribe("binding_aux_error", (event) => {
       const payload = parseEventPayload(event);

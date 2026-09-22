@@ -18,6 +18,7 @@ export function createConnection({
   ensureUnavailableRouteOptions,
   invoke,
   onConnected,
+  reconcileMidiRoutes,
   onDisconnected,
   onProfileDeviceSelected,
   refreshSessions,
@@ -88,12 +89,21 @@ export function createConnection({
         other &&
         route.inputDeviceId === other.inputDeviceId &&
         route.outputDeviceId === other.outputDeviceId &&
+        route.inputDeviceName === other.inputDeviceName &&
+        route.outputDeviceName === other.outputDeviceName &&
         (route.enabled !== false) === (other.enabled !== false)
       );
     });
   }
 
-  async function applyRoutes(routes, options = {}) {
+  let applyTail = Promise.resolve();
+  function applyRoutes(routes, options = {}) {
+    const pending = applyTail.then(() => applyRoutesNow(routes, options));
+    applyTail = pending.catch(() => {});
+    return pending;
+  }
+
+  async function applyRoutesNow(routes, options = {}) {
     const rawRoutes = Array.isArray(routes) ? routes : [];
     for (let index = 0; index < rawRoutes.length; index += 1) {
       const route = rawRoutes[index];
@@ -116,7 +126,7 @@ export function createConnection({
     const enabledRoutes = normalized.filter((route) => route.enabled !== false);
     const previousConnectedRoutes = connection.connectedRoutes.slice();
 
-    if (enabledRoutes.length === 0) {
+    if (enabledRoutes.length === 0 && !reconcileMidiRoutes) {
       stopSessionRefresh();
       cancelLearnPanel();
       connection.currentProfilePreference = normalizeMidiPreference({ routes: normalized, configured: true });
@@ -147,7 +157,7 @@ export function createConnection({
     const hasUnavailableRoutes = availableRoutes.length < enabledRoutes.length;
     const routesToStart =
       hasUnavailableRoutes && options.allowPartialUnavailable ? availableRoutes : enabledRoutes;
-    if (hasUnavailableRoutes && (!options.allowPartialUnavailable || routesToStart.length === 0)) {
+    if (hasUnavailableRoutes && (!options.allowPartialUnavailable || (routesToStart.length === 0 && !reconcileMidiRoutes))) {
       if (elements.midiStatus) {
         elements.midiStatus.textContent = options.partialUnavailableStatus || t("midi.unavailablePair");
       }
@@ -180,15 +190,13 @@ export function createConnection({
 
     // Recovery must reach the backend even when the saved device IDs are unchanged.
     // Keep force separate: the backend should preserve other healthy connections.
-    if (!options.force && !options.recover && routesEquivalent(routesToStart, connection.connectedRoutes)) {
+    if (!options.force && !options.recover && !options.fromProfile
+        && routesEquivalent(routesToStart, connection.connectedRoutes)
+        && routesEquivalent(normalized, connection.currentProfilePreference?.routes)) {
       if (hasUnavailableRoutes && elements.midiStatus) {
         elements.midiStatus.textContent = options.partialUnavailableStatus || t("midi.savedUnavailable");
       }
       renderDeviceDropdowns();
-      connection.currentProfilePreference = normalizeMidiPreference({ routes: normalized });
-      if (typeof onProfileDeviceSelected === "function") {
-        await onProfileDeviceSelected(connection.currentProfilePreference);
-      }
       return {
         connected: routesToStart.length > 0 || connection.connectedRoutes.length > 0,
         unchanged: true,
@@ -205,10 +213,14 @@ export function createConnection({
     stopSessionRefresh();
     let applyResult = null;
     try {
-      applyResult = await invoke("start_midi_device_routes", {
+      const args = {
         routes: buildPersistedMidiRoutes(routesToStart),
+        desiredRoutes: buildPersistedMidiRoutes(normalized),
         force: Boolean(options.force),
-      });
+      };
+      applyResult = reconcileMidiRoutes
+        ? await reconcileMidiRoutes(args)
+        : await invoke("start_midi_device_routes", args);
     } catch (error) {
       setConnectedRoutes(previousConnectedRoutes);
       renderDeviceDropdowns();
@@ -226,8 +238,15 @@ export function createConnection({
         ? applyResult.failed_routes
         : [];
     const incompleteBackendApply = applyResult?.complete === false || backendFailures.length > 0;
-    if (!incompleteBackendApply) {
+    if (applyResult?.profile) {
+      connection.currentProfilePreference = normalizeMidiPreference({
+        ...applyResult.profile.midi_device_preference,
+        configured: applyResult.profile.midi_device_preference_set,
+      });
+    } else if (!incompleteBackendApply) {
       connection.currentProfilePreference = normalizeMidiPreference({ routes: normalized });
+    }
+    if (!incompleteBackendApply) {
       connection.suspendProfileAutoReconnect = false;
       clearUnavailableDeviceSelections();
     }
@@ -261,7 +280,7 @@ export function createConnection({
         fromProfile: Boolean(options.fromProfile),
       });
     }
-    if (!incompleteBackendApply && typeof onProfileDeviceSelected === "function") {
+    if (!applyResult?.profile && !incompleteBackendApply && typeof onProfileDeviceSelected === "function") {
       await onProfileDeviceSelected(connection.currentProfilePreference);
     }
     renderDeviceDropdowns();

@@ -50,6 +50,16 @@ export function createDeviceOptions({
     };
   }
 
+  function getDeviceMappingLabel(deviceId) {
+    const route = currentRoutesForSave().find((r) => r.inputDeviceId === deviceId);
+    if (!route) return "";
+    const label = stripUnavailableSuffix(route.inputDeviceName || deviceId);
+    const available = route.enabled !== false && findDeviceBySavedIdentity(
+      discovery.lastDeviceSnapshot.inputs, deviceId, route.inputDeviceName,
+    );
+    return available || discovery.initialDeviceLoadPending ? label : `${label} (${t("targets.unavailable")})`;
+  }
+
   function buildRouteSelect(kind, route, index) {
     const wrapper = document.createElement("div");
     wrapper.className = "midi-route-select-wrap";
@@ -176,5 +186,5 @@ export function createDeviceOptions({
     return wrapper;
   }
 
-  return { findDeviceBySavedIdentity, routeWithResolvedNames, buildRouteSelect };
+  return { findDeviceBySavedIdentity, routeWithResolvedNames, buildRouteSelect, getDeviceMappingLabel };
 }

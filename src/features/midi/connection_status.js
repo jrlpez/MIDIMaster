@@ -44,6 +44,9 @@ export function createMidiConnectionStatusHandler({
         statusElement.textContent = t("midi.connected");
       }
     }
+    if (payload.reason === "start_partial") {
+      statusElement.textContent = t("midi.partialRetrying");
+    }
   }
 
   return { handle };

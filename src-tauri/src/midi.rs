@@ -79,6 +79,7 @@ pub struct MidiConnectionHealth {
 }
 
 pub struct MidiManager {
+    pub(crate) allow_single_route_fallback: bool,
     input_routes: HashMap<String, MidiInputRoute>,
     output_routes: HashMap<String, MidiOutputRoute>,
 }
@@ -120,6 +121,7 @@ impl MidiOutputRoute {
 impl MidiManager {
     pub fn new() -> Self {
         Self {
+            allow_single_route_fallback: false,
             input_routes: HashMap::new(),
             output_routes: HashMap::new(),
         }

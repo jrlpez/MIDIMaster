@@ -19,7 +19,48 @@ export function createPersistence({
   setActiveProfileName,
   setProfilePluginSettings,
   setProfileSelection,
+  setBindings,
+  renderBindings,
+  setMidiReconciliationBusy = () => {},
 }) {
+  let reconciliationTail = Promise.resolve();
+
+  function reconcileMidiRoutes(args) {
+    const expectedProfileName = args.expectedProfileName || getProfileNameForSave();
+    const run = reconciliationTail.then(async () => {
+      setMidiReconciliationBusy(true);
+      try {
+        await flushProfileSave();
+        let release;
+        saveState.reconciliation = new Promise((resolve) => { release = resolve; });
+        try {
+          if (expectedProfileName !== getProfileNameForSave()) {
+            throw new Error("Active profile changed before MIDI reconciliation");
+          }
+          const result = await invoke("start_midi_device_routes", { ...args, expectedProfileName });
+          const profile = result?.profile;
+          if (profile && profile.name === getProfileNameForSave()) {
+            // The command's snapshot is authoritative. Migration events are no
+            // longer applied as deltas, which could replay a swapped address.
+            setBindings?.(profile.bindings || []);
+            setActiveProfileMidiPreference?.(toClientMidiDevicePreference({
+              ...profile.midi_device_preference, configured: profile.midi_device_preference_set,
+            }));
+            getPluginHost?.()?.setBindings?.(profile.bindings || []);
+            renderBindings?.();
+          }
+          return result;
+        } finally {
+          saveState.reconciliation = null;
+          release();
+        }
+      } finally {
+        setMidiReconciliationBusy(false);
+      }
+    });
+    reconciliationTail = run.catch(() => {});
+    return run;
+  }
   function getProfileNameForSave() {
     const current = typeof getActiveProfileName === "function" ? getActiveProfileName() || "" : "";
     if (current) return current;
@@ -37,6 +78,7 @@ export function createPersistence({
   }
 
   async function persistCurrentProfile() {
+    if (saveState.reconciliation) await saveState.reconciliation;
     const name = getProfileNameForSave();
     if (!name) return;
 
@@ -114,6 +156,7 @@ export function createPersistence({
   }
 
   async function flushProfileSave() {
+    if (saveState.reconciliation) await saveState.reconciliation;
     if (saveState.promise) {
       if (saveState.timer) {
         clearTimeout(saveState.timer);
@@ -160,6 +203,7 @@ export function createPersistence({
   }
 
   return {
+    reconcileMidiRoutes,
     getProfileNameForSave,
     ensureSaveProfilePromise,
     persistCurrentProfile,

@@ -106,7 +106,7 @@ impl MidiManager {
                 )
             })
             .or_else(|| {
-                if self.input_routes.len() == 1 {
+                if self.allow_single_route_fallback && self.input_routes.len() == 1 {
                     self.input_routes.values().next().map(|route| {
                         (
                             route.input_device_id.clone(),

@@ -74,6 +74,13 @@ impl Default for MidiEventQueue {
 }
 
 impl MidiEventQueue {
+    pub(crate) fn discard_devices(&mut self, devices: &std::collections::HashSet<String>) {
+        self.pending_latest
+            .retain(|key, _| !devices.contains(&key.device_id));
+        self.preserved
+            .retain(|queued| !devices.contains(&queued.event.device_id));
+    }
+
     pub(crate) fn new(max_pending_keys: usize, max_preserved_events: usize) -> Self {
         Self {
             pending_latest: HashMap::new(),
@@ -301,6 +308,21 @@ mod tests {
             .into_iter()
             .map(|event| event.controller)
             .collect()
+    }
+
+    #[test]
+    fn reconnect_discards_old_fader_and_button_events_but_keeps_other_devices() {
+        let mut queue = MidiEventQueue::new(16, 16);
+        queue.enqueue(cc(7, 64));
+        queue.enqueue(note(127));
+        let mut unaffected = cc(7, 32);
+        unaffected.device_id = "midi:8".into();
+        queue.enqueue(unaffected);
+        queue.discard_devices(&["midi:0".to_string()].into_iter().collect());
+        let events = queue.drain();
+        assert_eq!(events.len(), 1);
+        assert_eq!(events[0].device_id, "midi:8");
+        assert_eq!(events[0].value, 32);
     }
 
     #[test]

@@ -407,6 +407,7 @@ fn feedback_failure_marks_only_binding_route_output_suspect() {
 #[test]
 fn feedback_with_stale_device_id_uses_single_active_route() {
     let mut manager = manager_with_test_route("midi:1", "midi:998");
+    manager.allow_single_route_fallback = true;
 
     manager
         .send_feedback("midi:0", 0, 7, 0.5, MidiMessageType::ControlChange)
@@ -417,6 +418,17 @@ fn feedback_with_stale_device_id_uses_single_active_route() {
     assert_eq!(health[0].input_device_id, "midi:1");
     assert_eq!(health[0].output_device_id, "midi:998");
     assert!(health[0].suspect);
+}
+
+#[test]
+fn missing_second_device_does_not_redirect_its_feedback_to_the_remaining_device() {
+    let mut manager = manager_with_test_route("midi:1", "midi:998");
+    manager.allow_single_route_fallback = false;
+    manager
+        .send_feedback("midi:0", 0, 16, 1.0, MidiMessageType::Note)
+        .unwrap();
+    // No attempted send/reconnect on the surviving route.
+    assert!(!manager.output_routes["midi:998"].connection_suspect);
 }
 
 #[test]

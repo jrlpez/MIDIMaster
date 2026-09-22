@@ -192,7 +192,9 @@ export function createMidiLearn({
 
     const main = document.createElement("span");
     main.className = "binding-config-label-main";
-    main.textContent = mappingText;
+    if (binding?.assign_control) {
+      renderMidiMappingSummary(main, binding.assign_control.device_id, binding.assign_control, mappingText);
+    } else main.textContent = mappingText;
 
     const badge = document.createElement("span");
     badge.className = "binding-config-inline-badge";
@@ -212,7 +214,9 @@ export function createMidiLearn({
 
     const main = document.createElement("span");
     main.className = "binding-config-label-main";
-    main.textContent = mappingText;
+    if (binding?.mute_control) {
+      renderMidiMappingSummary(main, binding.mute_control.device_id, binding.mute_control, mappingText);
+    } else main.textContent = mappingText;
 
     const badge = document.createElement("span");
     badge.className = "binding-config-inline-badge";

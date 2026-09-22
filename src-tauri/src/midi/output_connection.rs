@@ -26,6 +26,13 @@ impl MidiManager {
                     .and_then(|route| clean_expected_device_name(Some(&route.output_device_name)))
             });
         if let Some(route) = self.output_routes.get_mut(output_device_id) {
+            if device_name_mismatch(
+                expected_output_device_name.as_deref(),
+                Some(&route.output_device_name),
+            ) {
+                route.output_connection = None;
+                route.connection_suspect = true;
+            }
             if route.output_connection.is_some() && !route.connection_suspect {
                 if let Some(expected_name) = expected_output_device_name.as_deref() {
                     match current_output_port_name(output_device_id) {

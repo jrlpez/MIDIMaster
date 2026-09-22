@@ -110,6 +110,66 @@ fn should_send_feedback(
     true
 }
 
+// The reconciliation gate covers draining and applying the whole batch, not
+// just the device callback, so an old queued event cannot outlive a port swap.
+fn dispatch_midi_batch(app_handle: &AppHandle) -> bool {
+    let state = app_handle.state::<AppState>();
+    let Ok(_dispatch) = state.midi_dispatch_lock.lock() else {
+        return false;
+    };
+    let (events, stats) = state
+        .midi_event_queue
+        .lock()
+        .map(|mut queue| {
+            #[cfg(not(feature = "perf-audit"))]
+            let events = queue.drain();
+            #[cfg(feature = "perf-audit")]
+            let events = queue.drain_audited();
+            let stats = queue.take_stats();
+            (events, stats)
+        })
+        .unwrap_or_default();
+
+    let had_events = !events.is_empty();
+    log_queue_stats(stats);
+
+    for event in events {
+        #[cfg(feature = "perf-audit")]
+        let (event, audit_token) = event;
+        #[cfg(feature = "perf-audit")]
+        let dispatched_at = Instant::now();
+        #[cfg(feature = "perf-audit")]
+        {
+            let mut payload = audit_token.identity();
+            payload["enqueue_to_dispatch_us"] = serde_json::json!(dispatched_at
+                .saturating_duration_since(audit_token.at)
+                .as_micros()
+                .min(u64::MAX as u128)
+                as u64);
+            let _ = app_handle.emit("perf_audit_midi_dispatch", payload);
+        }
+        let _ = app_handle.emit("midi_event", &event);
+        #[cfg(feature = "perf-audit")]
+        let action_scope = crate::perf_audit::MidiActionScope::begin(audit_token, dispatched_at);
+        let result = state.apply_midi_event(app_handle, event);
+        #[cfg(feature = "perf-audit")]
+        {
+            let _ = app_handle.emit(
+                "perf_audit_midi_outcome",
+                action_scope.finish(result.is_err()),
+            );
+        }
+        if let Err(err) = result {
+            run_logger::error(
+                "midi_queue",
+                "event_apply_failed",
+                &format!("error={}", err),
+            );
+        }
+    }
+    had_events
+}
+
 pub(crate) fn spawn_midi_event_queue_loop(
     app_handle: AppHandle,
     mut shutdown: watch::Receiver<bool>,
@@ -121,26 +181,11 @@ pub(crate) fn spawn_midi_event_queue_loop(
                 break;
             }
 
-            let state = app_handle.state::<AppState>();
-            let (events, stats) = state
-                .midi_event_queue
-                .lock()
-                .map(|mut queue| {
-                    #[cfg(not(feature = "perf-audit"))]
-                    let events = queue.drain();
-                    #[cfg(feature = "perf-audit")]
-                    let events = queue.drain_audited();
-                    let stats = queue.take_stats();
-                    (events, stats)
-                })
-                .unwrap_or_default();
-
-            if events.is_empty() && stats.coalesced == 0 && stats.dropped == 0 {
+            let had_events = dispatch_midi_batch(&app_handle);
+            if !had_events {
                 tokio::select! {
                     changed = shutdown.changed() => {
-                        if changed.is_err() || shutdown_requested(&shutdown) {
-                            break;
-                        }
+                        if changed.is_err() || shutdown_requested(&shutdown) { break; }
                     }
                     _ = notify.notified() => {}
                 }
@@ -148,45 +193,6 @@ pub(crate) fn spawn_midi_event_queue_loop(
                     break;
                 }
                 continue;
-            }
-
-            let had_events = !events.is_empty();
-            log_queue_stats(stats);
-
-            for event in events {
-                #[cfg(feature = "perf-audit")]
-                let (event, audit_token) = event;
-                #[cfg(feature = "perf-audit")]
-                let dispatched_at = Instant::now();
-                #[cfg(feature = "perf-audit")]
-                {
-                    let mut payload = audit_token.identity();
-                    payload["enqueue_to_dispatch_us"] = serde_json::json!(dispatched_at
-                        .saturating_duration_since(audit_token.at)
-                        .as_micros()
-                        .min(u64::MAX as u128)
-                        as u64);
-                    let _ = app_handle.emit("perf_audit_midi_dispatch", payload);
-                }
-                let _ = app_handle.emit("midi_event", &event);
-                #[cfg(feature = "perf-audit")]
-                let action_scope =
-                    crate::perf_audit::MidiActionScope::begin(audit_token, dispatched_at);
-                let result = state.apply_midi_event(&app_handle, event);
-                #[cfg(feature = "perf-audit")]
-                {
-                    let _ = app_handle.emit(
-                        "perf_audit_midi_outcome",
-                        action_scope.finish(result.is_err()),
-                    );
-                }
-                if let Err(err) = result {
-                    run_logger::error(
-                        "midi_queue",
-                        "event_apply_failed",
-                        &format!("error={}", err),
-                    );
-                }
             }
             if had_events && sleep_or_shutdown(&mut shutdown, MIDI_QUEUE_BATCH_DELAY).await {
                 break;

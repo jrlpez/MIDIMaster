@@ -34,9 +34,11 @@ export function createAvailability({
   stopSessionRefresh,
   t,
   unresolvedRouteStatus,
+  canReconcileMidi = () => true,
 }) {
   async function checkAvailabilityLoop() {
     if (discovery.disposed) return;
+    if (!canReconcileMidi()) return;
     if (discovery.availabilityCheckInFlight) return;
     discovery.availabilityCheckInFlight = true;
     try {
@@ -182,11 +184,8 @@ export function createAvailability({
               route.outputDeviceName,
             ),
         );
-        if (routesEquivalent(availableEnabledRoutes, connection.connectedRoutes)) {
-          connection.currentProfilePreference = normalizeMidiPreference({ routes });
-          if (typeof onProfileDeviceSelected === "function") {
-            await onProfileDeviceSelected(connection.currentProfilePreference);
-          }
+        if (routesEquivalent(availableEnabledRoutes, connection.connectedRoutes)
+            && routesEquivalent(routes, connection.currentProfilePreference?.routes)) {
           renderDeviceDropdowns();
           return;
         }

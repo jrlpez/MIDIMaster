@@ -32,6 +32,7 @@ export function createProfilesFeature({
   onProfileLoaded,
   showAlert,
   showChoices,
+  setMidiReconciliationBusy,
 }) {
   if (typeof invoke !== "function") {
     throw new Error("createProfilesFeature: invoke is required");
@@ -180,6 +181,7 @@ export function createProfilesFeature({
   }
 
   const {
+    reconcileMidiRoutes,
     getProfileNameForSave,
     ensureSaveProfilePromise,
     persistCurrentProfile,
@@ -199,6 +201,9 @@ export function createProfilesFeature({
     getProfilePluginSettings,
     invoke,
     saveState,
+    setBindings,
+    renderBindings,
+    setMidiReconciliationBusy,
     setActiveProfileMidiPreference,
     setActiveProfileName,
     setProfilePluginSettings,
@@ -288,6 +293,7 @@ export function createProfilesFeature({
     closeProfileDropdown,
     saveBindingsForProfile,
     flushProfileSave,
+    reconcileMidiRoutes,
     updateProfilePluginSettings,
     updateProfileMidiPreference,
     exportProfileByName,

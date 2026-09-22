@@ -40,6 +40,7 @@ pub(crate) struct ProfileSnapshot {
     profile: Profile,
     exact_bindings: HashMap<BindingKey, usize>,
     fallback_bindings: HashMap<ControlKey, Option<usize>>,
+    allow_single_device_fallback: bool,
 }
 
 impl ProfileSnapshot {
@@ -56,6 +57,9 @@ impl ProfileSnapshot {
                 .or_insert(Some(index));
         }
         Self {
+            allow_single_device_fallback: crate::midi_reconciliation::allows_single_device_fallback(
+                &profile,
+            ),
             profile,
             exact_bindings,
             fallback_bindings,
@@ -74,7 +78,7 @@ impl ProfileSnapshot {
         if let Some(index) = self.exact_bindings.get(key) {
             return self.profile.bindings.get(*index);
         }
-        if !allow_stale_device_fallback {
+        if !allow_stale_device_fallback || !self.allow_single_device_fallback {
             return None;
         }
         let index = self

@@ -811,6 +811,7 @@ export function createBindingsFeature({
     syncButtonVisualState,
     setButtonVisualState,
     getRenderedBindingRefs: (bindingId) => renderedBindings.get(bindingId),
+    hasMidiMappingDraft: () => Boolean(editorState.bindingId || listState.editingId),
     getRenderedBindingIndex: () => renderedBindings,
     queueBindingReveal,
     openBindingTargetPicker,

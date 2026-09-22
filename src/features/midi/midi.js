@@ -68,6 +68,8 @@ export function createMidiFeature({
   onProfileDeviceSelected,
   onDeviceInventoryChanged,
   i18n,
+  reconcileMidiRoutes,
+  canReconcileMidi = () => true,
 }) {
   if (typeof invoke !== "function") {
     throw new Error("createMidiFeature: invoke is required");
@@ -224,7 +226,7 @@ export function createMidiFeature({
     t,
   });
 
-  const { findDeviceBySavedIdentity, routeWithResolvedNames, buildRouteSelect } = createDeviceOptions({
+  const { findDeviceBySavedIdentity, routeWithResolvedNames, buildRouteSelect, getDeviceMappingLabel } = createDeviceOptions({
     currentRoutesForSave,
     discovery,
     routeView,
@@ -275,6 +277,7 @@ export function createMidiFeature({
     ensureUnavailableRouteOptions,
     invoke,
     onConnected,
+    reconcileMidiRoutes,
     onDisconnected,
     onProfileDeviceSelected,
     refreshSessions,
@@ -296,6 +299,7 @@ export function createMidiFeature({
       applyRoutes,
       connection,
       elements,
+      canReconcileMidi: () => canReconcileMidi() && !learning.learnTimer,
       desiredRoutes,
       discovery,
       enumerateMidiDevices,
@@ -400,5 +404,6 @@ export function createMidiFeature({
     completeInitialDeviceLoad,
     getDesiredMidiPreference,
     checkAvailabilityNow: checkAvailabilityLoop,
+    getDeviceMappingLabel,
   };
 }

@@ -81,6 +81,7 @@ pub(crate) fn focused_application_name() -> Option<String> {
 pub(crate) struct AppState {
     pub(crate) audio: Box<dyn AudioBackend>,
     pub(crate) midi: Arc<Mutex<MidiManager>>,
+    pub(crate) midi_dispatch_lock: Mutex<()>,
     pub(crate) midi_event_queue: Arc<Mutex<MidiEventQueue>>,
     pub(crate) profile_store: ProfileStore,
     pub(crate) app_settings_store: AppSettingsStore,
@@ -243,6 +244,7 @@ impl AppState {
         Self {
             audio,
             midi: Arc::new(Mutex::new(MidiManager::new())),
+            midi_dispatch_lock: Mutex::new(()),
             midi_event_queue: Arc::new(Mutex::new(MidiEventQueue::default())),
             profile_store,
             app_settings_store,

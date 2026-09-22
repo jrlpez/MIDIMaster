@@ -31,6 +31,35 @@ impl MidiManager {
 
         preflight_midi_routes(&next_routes)?;
 
+        // A reused index can now designate a different physical port. Never
+        // relabel an old handle and keep using it for the new identity.
+        for route in &next_routes {
+            if self
+                .input_routes
+                .get(&route.input_device_id)
+                .is_some_and(|old| {
+                    device_name_mismatch(
+                        route.input_device_name.as_deref(),
+                        Some(&old.input_device_name),
+                    )
+                })
+            {
+                self.input_routes.remove(&route.input_device_id);
+            }
+            if self
+                .output_routes
+                .get(&route.output_device_id)
+                .is_some_and(|old| {
+                    device_name_mismatch(
+                        route.output_device_name.as_deref(),
+                        Some(&old.output_device_name),
+                    )
+                })
+            {
+                self.force_output_reconnect(&route.output_device_id);
+            }
+        }
+
         self.prepare_route_recovery(&next_routes, force_reconnect);
 
         let desired_inputs = next_routes

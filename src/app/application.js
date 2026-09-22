@@ -264,11 +264,10 @@ export function createApplication() {
   }
 
   function knownMidiRouteCount() {
-    return (
-      viewState.activeMidiRouteCount ||
-      enabledMidiRouteCount(clientPreferences.persistedMidiRoutes) ||
-      enabledMidiRouteCount(profileState.midiPreference.routes)
-    );
+    return Math.max(viewState.activeMidiRouteCount || 0,
+      normalizeMidiRoutes(profileState.midiPreference).length,
+      new Set(profileState.bindings.flatMap((b) => [b.device_id, b.mute_control?.device_id, b.assign_control?.device_id]).filter(Boolean)).size);
+
   }
 
   function normalizeMidiMessageType(value) {
@@ -635,6 +634,7 @@ export function createApplication() {
     setActiveProfileMidiPreference: (next) => {
       profileState.midiPreference = normalizeMidiPreference(next);
     },
+    setMidiReconciliationBusy: (busy) => { appShell.inert = busy; },
     onProfileLoaded: async ({ midiDevicePreference, midiDevicePreferenceSet }) => {
       const finish = performanceAudit.begin("profile-midi-sync");
       profileState.midiPreference = normalizeMidiPreference({
@@ -694,7 +694,7 @@ export function createApplication() {
     },
     bindingFallbackName,
     controlLabel,
-    getMidiDeviceLabel: preferenceActions.midiDeviceLabelForBindingDevice,
+    getMidiDeviceLabel: (id) => features.midi?.getDeviceMappingLabel(id) || preferenceActions.midiDeviceLabelForBindingDevice(id),
     buildTargetSelect: (...args) => features.targets?.buildTargetSelect(...args),
     getVolumeForTarget,
     getMuteForTarget,
@@ -757,6 +757,8 @@ export function createApplication() {
     onDisconnected: () => {
       viewState.activeMidiRouteCount = 0;
     },
+    reconcileMidiRoutes: (args) => features.profiles.reconcileMidiRoutes(args),
+    canReconcileMidi: () => !features.bindings?.hasMidiMappingDraft?.(),
     onDeviceInventoryChanged: () => {
       queueMidiDeviceInventorySubmit("device_inventory_changed");
     },

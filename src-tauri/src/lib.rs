@@ -17,6 +17,7 @@ mod fader_curve;
 mod feedback;
 mod midi;
 mod midi_event_queue;
+mod midi_reconciliation;
 pub mod model;
 mod monitor_brightness;
 mod monitors;
