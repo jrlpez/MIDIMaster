@@ -70,7 +70,7 @@ pub fn peak_for_target(target: &BindingTarget, peaks: &AudioPeakLevels) -> f32 {
         BindingTarget::Device { device_id } => {
             let (kind, raw_id) = parse_device_target(device_id);
             match kind {
-                DeviceTargetKind::Playback => peaks.devices.get(&raw_id).copied().unwrap_or(0.0),
+                DeviceTargetKind::Playback => peaks.devices.get(raw_id).copied().unwrap_or(0.0),
                 DeviceTargetKind::Recording => 0.0,
             }
         }

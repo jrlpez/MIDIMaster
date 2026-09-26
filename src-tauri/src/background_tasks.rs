@@ -317,7 +317,7 @@ pub(crate) fn spawn_feedback_refresh_loop(
             let profile_active = profile.is_some();
             let has_audio_reactive_led = profile
                 .as_ref()
-                .map(profile_has_audio_reactive_led)
+                .map(|snapshot| profile_has_audio_reactive_led(snapshot))
                 .unwrap_or(false);
             if let Some(profile) = profile.as_ref() {
                 let sync_interval = if profile_has_focus_target(profile) {
