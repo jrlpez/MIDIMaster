@@ -401,11 +401,12 @@ export function createFeedbackEditor({
     setLedTestStatus("info", t("bindings.testLedTesting"));
     if (ledTestTimer) window.clearTimeout(ledTestTimer);
     try {
+      // Tauri command args are camelCase on the wire (device_id → deviceId).
       await invoke("test_midi_feedback_output", {
-        device_id: deviceId,
+        deviceId,
         channel,
         controller,
-        msg_type: msgType,
+        msgType,
       });
       setLedTestStatus("info", t("bindings.testLedDone"));
       ledTestTimer = window.setTimeout(() => {
@@ -413,7 +414,9 @@ export function createFeedbackEditor({
         ledTestTimer = 0;
       }, 1800);
     } catch (error) {
-      const message = error?.message || String(error || "Unknown error");
+      const raw = error?.message || String(error || "Unknown error");
+      // Prefer the human-readable tail of Tauri IPC errors over the full arg dump.
+      const message = raw.includes(": ") ? raw.slice(raw.lastIndexOf(": ") + 2).trim() || raw : raw;
       setLedTestStatus("error", t("bindings.testLedFailed", { error: message }));
     } finally {
       // Keep the button busy for the full pulse sequence so users don't stack tests.

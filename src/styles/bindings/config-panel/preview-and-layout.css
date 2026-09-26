@@ -396,6 +396,8 @@
 
 .binding-config-panel--fader:not(.binding-config-panel--macro-page) .binding-config-section--feedback-output {
   grid-area: feedback;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .binding-config-panel--fader:not(.binding-config-panel--macro-page) .binding-config-section--mute {

@@ -246,16 +246,20 @@ body[data-theme] .binding-config-midi-control {
 .binding-config-footer {
   display: flex;
   justify-content: flex-end;
+  flex-wrap: nowrap;
   gap: 8px;
   padding: 8px 10px 10px;
   border-top: 1px solid rgba(122, 141, 179, 0.16);
   flex: 0 0 auto;
+  min-width: 0;
 }
 
 .binding-config-footer button {
+  flex: 0 0 auto;
   min-width: 136px;
   height: 34px;
   border-radius: 10px;
+  white-space: nowrap;
 }
 
 @media (max-height: 780px) {
