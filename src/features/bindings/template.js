@@ -35,16 +35,16 @@ export const bindingsTemplate = `<div id="binding-config-panel" class="target-pa
                   <option value="FollowState" data-i18n="bindings.buttonLightWhenOn">When On</option>
                   <option value="InvertState" data-i18n="bindings.buttonLightWhenOff">When Off</option>
                   <option value="Pressed" data-i18n="bindings.buttonLightWhilePressed">While Pressed</option>
-                  <option value="AudioReactive" data-i18n="bindings.ledMusicReactive">Music Reactive</option>
+                  <option value="AudioReactive" data-i18n="bindings.ledMusicReactive">Audio Reactive</option>
                 </select>
               </label>
               <label id="binding-config-led-intensity-row" class="binding-config-select-row binding-config-led-intensity-row hidden">
                 <span class="binding-config-toggle-copy">
-                  <span class="binding-config-toggle-title" data-i18n="bindings.ledIntensity">LED intensity</span>
-                  <span class="binding-config-toggle-help" data-i18n="bindings.ledIntensityHelp">How strongly the light reacts to audio peaks.</span>
+                  <span class="binding-config-toggle-title" data-i18n="bindings.ledIntensity">LED sensitivity</span>
+                  <span class="binding-config-toggle-help" data-i18n="bindings.ledIntensityHelp">How strongly the light reacts to peaks and small level changes around the current meter.</span>
                 </span>
                 <span class="binding-config-led-intensity-control">
-                  <input id="binding-config-led-intensity" type="range" min="0" max="200" step="5" value="100" aria-label="LED intensity" data-i18n-aria-label="bindings.ledIntensity" />
+                  <input id="binding-config-led-intensity" type="range" min="0" max="200" step="1" value="100" aria-label="LED sensitivity" data-i18n-aria-label="bindings.ledIntensity" />
                   <strong id="binding-config-led-intensity-value">100%</strong>
                 </span>
               </label>
@@ -238,16 +238,16 @@ export const bindingsTemplate = `<div id="binding-config-panel" class="target-pa
                 </span>
                 <select id="binding-config-led-mode-select" class="binding-config-light-select" aria-label="LED mode" data-i18n-aria-label="bindings.ledMode">
                   <option value="FollowValue" data-i18n="bindings.ledFollowValue">Follow Value</option>
-                  <option value="AudioReactive" data-i18n="bindings.ledMusicReactive">Music Reactive</option>
+                  <option value="AudioReactive" data-i18n="bindings.ledMusicReactive">Audio Reactive</option>
                 </select>
               </label>
               <label id="binding-config-feedback-led-intensity-row" class="binding-config-select-row binding-config-led-intensity-row hidden">
                 <span class="binding-config-toggle-copy">
-                  <span class="binding-config-toggle-title" data-i18n="bindings.ledIntensity">LED intensity</span>
-                  <span class="binding-config-toggle-help" data-i18n="bindings.ledIntensityHelp">How strongly the light reacts to audio peaks.</span>
+                  <span class="binding-config-toggle-title" data-i18n="bindings.ledIntensity">LED sensitivity</span>
+                  <span class="binding-config-toggle-help" data-i18n="bindings.ledIntensityHelp">How strongly the light reacts to peaks and small level changes around the current meter.</span>
                 </span>
                 <span class="binding-config-led-intensity-control">
-                  <input id="binding-config-feedback-led-intensity" type="range" min="0" max="200" step="5" value="100" aria-label="LED intensity" data-i18n-aria-label="bindings.ledIntensity" />
+                  <input id="binding-config-feedback-led-intensity" type="range" min="0" max="200" step="1" value="100" aria-label="LED sensitivity" data-i18n-aria-label="bindings.ledIntensity" />
                   <strong id="binding-config-feedback-led-intensity-value">100%</strong>
                 </span>
               </label>

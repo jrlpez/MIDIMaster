@@ -264,7 +264,8 @@ pub(crate) fn spawn_feedback_refresh_loop(
         let mut last_reactive_led_sync = Instant::now()
             .checked_sub(AUDIO_REACTIVE_LED_INTERVAL)
             .unwrap_or_else(Instant::now);
-        let mut reactive_led_levels: HashMap<BindingKey, f32> = HashMap::new();
+        let mut reactive_led_state: HashMap<BindingKey, crate::led_feedback::ReactiveLedState> =
+            HashMap::new();
 
         loop {
             if shutdown_requested(&shutdown) {
@@ -339,7 +340,7 @@ pub(crate) fn spawn_feedback_refresh_loop(
                     if context_changed {
                         last_feedback_context = context;
                         last_sent_feedback.clear();
-                        reactive_led_levels.clear();
+                        reactive_led_state.clear();
                     }
 
                     let force_feedback_resend = context_changed
@@ -443,13 +444,18 @@ pub(crate) fn spawn_feedback_refresh_loop(
                             let output_control =
                                 feedback::binding_feedback_control_key(binding);
                             let output_key = output_control.to_binding_key();
-                            let previous = reactive_led_levels.get(&output_key).copied().unwrap_or(0.0);
-                            let Some(level) = crate::led_feedback::reactive_led_level_for_binding(
-                                binding, &peaks, previous,
-                            ) else {
+                            let previous = reactive_led_state
+                                .get(&output_key)
+                                .copied()
+                                .unwrap_or_default();
+                            let Some((level, next_state)) =
+                                crate::led_feedback::reactive_led_level_for_binding(
+                                    binding, &peaks, previous,
+                                )
+                            else {
                                 continue;
                             };
-                            reactive_led_levels.insert(output_key.clone(), level);
+                            reactive_led_state.insert(output_key.clone(), next_state);
                             if should_send_feedback(
                                 &mut last_sent_feedback,
                                 output_key,
@@ -469,7 +475,7 @@ pub(crate) fn spawn_feedback_refresh_loop(
                 last_focused_session = None;
                 last_feedback_context.clear();
                 last_sent_feedback.clear();
-                reactive_led_levels.clear();
+                reactive_led_state.clear();
             }
 
             if last_osd_hide_check.elapsed() >= OSD_HIDE_CHECK_INTERVAL {
