@@ -26,6 +26,8 @@ pub fn binding() -> Binding {
         button_light_mode: model::ButtonLightMode::Activity,
         button_light_behavior: model::ButtonLightBehavior::FollowState,
         feedback_enabled: true,
+        led_feedback_mode: model::LedFeedbackMode::FollowValue,
+        led_intensity: 1.0,
         indicator_control: None,
         mute_control: None,
         assign_control: None,

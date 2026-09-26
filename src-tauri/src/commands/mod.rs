@@ -75,6 +75,7 @@ macro_rules! command_registry {
             import_profile_from_file,
             start_midi_learn,
             consume_learned_control,
+            test_midi_feedback_output,
             add_binding,
             remove_binding,
             update_midi_feedback,

@@ -52,6 +52,9 @@ pub fn update_midi_feedback(
         }
 
         if binding.is_button_binding() {
+            if binding.uses_audio_reactive_led() {
+                continue;
+            }
             feedback::send_button_light_feedback_to_binding(
                 state,
                 binding,
@@ -67,6 +70,22 @@ pub fn update_midi_feedback(
                 "button_light_feedback_sent",
                 &format!("binding_id={} value={}", binding.id, feedback_value),
             );
+            continue;
+        }
+
+        if binding.uses_audio_reactive_led() {
+            if binding.custom_feedback_output_control().is_some() {
+                feedback::send_feedback_to_control(
+                    state,
+                    &FeedbackControlKey::from_binding(binding),
+                    FeedbackSendOptions {
+                        value: feedback_value,
+                        silent: false,
+                        force_hardware_feedback: false,
+                        context: &format!("target_feedback_primary:{}", binding.id),
+                    },
+                );
+            }
             continue;
         }
 

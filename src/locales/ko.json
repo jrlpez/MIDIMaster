@@ -684,5 +684,16 @@
   "bindings.buttonLightWhenMapped": "매핑 시",
   "bindings.buttonLightWhenOn": "켜짐일 때",
   "bindings.buttonLightWhenOff": "꺼짐일 때",
-  "bindings.buttonLightWhilePressed": "누르는 동안"
+  "bindings.buttonLightWhilePressed": "누르는 동안",
+  "bindings.ledMode": "LED mode",
+  "bindings.ledModeHelp": "Follow the fader value, or pulse the light with the bound audio level.",
+  "bindings.ledFollowValue": "Follow Value",
+  "bindings.ledMusicReactive": "Audio Reactive",
+  "bindings.ledIntensity": "LED sensitivity",
+  "bindings.ledIntensityHelp": "How strongly the light reacts to peaks and small level changes around the current meter.",
+  "bindings.testLed": "Test LED",
+  "bindings.testLedHelp": "Flash the configured LED address three times.",
+  "bindings.testLedTesting": "Flashing LED…",
+  "bindings.testLedDone": "Test pulse sent.",
+  "bindings.testLedFailed": "LED test failed: {error}"
 }

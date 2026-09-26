@@ -371,12 +371,15 @@ export function createBindingsFeature({
     syncFeedbackControllerInputState,
     syncIndicatorUi,
     syncFeedbackOutputUi,
+    testLedOutput,
     updateIndicatorFromFields,
     updateFeedbackOutputFromFields,
+    updateLedIntensityFromInput,
   } = createFeedbackEditor({
     elements,
     editorState,
     getConfigBinding: (...args) => getConfigBinding(...args),
+    invoke,
     listState,
     renderConfigPreview: (...args) => renderConfigPreview(...args),
     t,
@@ -778,8 +781,10 @@ export function createBindingsFeature({
     t,
     updateAuxLearnUi,
     updateCustomCurveFromPointer,
+    testLedOutput,
     updateFeedbackOutputFromFields,
     updateIndicatorFromFields,
+    updateLedIntensityFromInput,
     updateMacroDrag,
   });
 

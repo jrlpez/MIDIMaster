@@ -1,5 +1,5 @@
 pub use super::action_mappings::*;
-use super::control_types::default_feedback_enabled;
+use super::control_types::{default_feedback_enabled, default_led_intensity};
 pub use super::control_types::*;
 pub use super::macro_types::*;
 use super::midi_types::{MidiControl, MidiMessageType};
@@ -40,6 +40,10 @@ pub struct Binding {
     pub button_light_behavior: ButtonLightBehavior,
     #[serde(default = "default_feedback_enabled")]
     pub feedback_enabled: bool,
+    #[serde(default)]
+    pub led_feedback_mode: LedFeedbackMode,
+    #[serde(default = "default_led_intensity")]
+    pub led_intensity: f32,
     #[serde(default)]
     pub indicator_control: Option<AuxiliaryControl>,
     #[serde(default)]
@@ -143,6 +147,17 @@ impl Binding {
                 ))
     }
 
+    pub fn uses_audio_reactive_led(&self) -> bool {
+        self.feedback_enabled && self.led_feedback_mode.is_audio_reactive()
+    }
+
+    pub fn normalized_led_intensity(&self) -> f32 {
+        if !self.led_intensity.is_finite() {
+            return 1.0;
+        }
+        self.led_intensity.clamp(0.0, 2.0)
+    }
+
     pub fn mapped_button_light_feedback_value(&self) -> Option<f32> {
         self.mapped_button_light_feedback_value_with_availability(|_| true)
     }
@@ -153,6 +168,7 @@ impl Binding {
     ) -> Option<f32> {
         if !self.feedback_enabled
             || !self.is_button_binding()
+            || self.uses_audio_reactive_led()
             || !matches!(&self.button_light_mode, ButtonLightMode::MappedWhenAssigned)
         {
             return None;
@@ -205,6 +221,9 @@ impl Binding {
         state_active: Option<bool>,
     ) -> Option<f32> {
         if !self.feedback_enabled || !self.is_button_binding() {
+            return None;
+        }
+        if self.uses_audio_reactive_led() {
             return None;
         }
 

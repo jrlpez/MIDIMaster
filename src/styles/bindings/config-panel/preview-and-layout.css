@@ -339,7 +339,8 @@
 
 .binding-config-panel--fader:not(.binding-config-panel--macro-page) .binding-config-layout {
   display: grid;
-  flex: 0 1 auto;
+  /* Keep content height; body scrolls. Shrinking + overflow:visible painted over the Save footer. */
+  flex: 0 0 auto;
   grid-template-columns: minmax(0, 0.675fr) minmax(0, 0.675fr) minmax(270px, 0.85fr);
   grid-template-areas:
     "name name live"
@@ -350,7 +351,7 @@
   align-items: stretch;
   align-content: start;
   padding: 10px;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .binding-config-panel--fader:not(.binding-config-panel--macro-page) .binding-config-main-column {
@@ -396,6 +397,8 @@
 
 .binding-config-panel--fader:not(.binding-config-panel--macro-page) .binding-config-section--feedback-output {
   grid-area: feedback;
+  min-width: 0;
+  min-height: min-content;
 }
 
 .binding-config-panel--fader:not(.binding-config-panel--macro-page) .binding-config-section--mute {

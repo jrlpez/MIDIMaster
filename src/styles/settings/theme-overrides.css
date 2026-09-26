@@ -401,6 +401,7 @@ body[data-theme] #binding-config-panel .binding-config-layout {
 body[data-theme] #binding-config-panel .binding-config-main-column,
 body[data-theme] #binding-config-panel .binding-config-footer {
   border-color: var(--binding-config-border-soft);
+  background: var(--binding-config-panel-bg);
 }
 
 body[data-theme] #binding-config-panel .binding-config-section,

@@ -5,11 +5,12 @@ use crate::midi_reconciliation::{
 use crate::run_logger;
 use crate::{
     midi::MidiConnectionHealth,
-    model::{DeviceInfo, MidiDeviceRoute, Profile},
+    model::{DeviceInfo, MidiDeviceRoute, MidiMessageType, Profile},
     AppState,
 };
 use serde::Serialize;
 use std::sync::Arc;
+use std::time::Duration;
 use tauri::{AppHandle, Emitter, Manager, State};
 
 #[derive(Debug, Clone, Serialize)]
@@ -455,6 +456,64 @@ pub fn consume_learned_control(
         );
     }
     Ok(next)
+}
+
+#[tauri::command]
+pub fn test_midi_feedback_output(
+    state: State<'_, AppState>,
+    device_id: String,
+    channel: u8,
+    controller: u8,
+    msg_type: String,
+) -> Result<(), String> {
+    let device_id = device_id.trim().to_string();
+    if device_id.is_empty() {
+        return Err("MIDI device is required to test LED feedback".to_string());
+    }
+    let msg_type = match msg_type.as_str() {
+        "Note" => MidiMessageType::Note,
+        "PitchBend" => MidiMessageType::PitchBend,
+        "ControlChange" | "CC" => MidiMessageType::ControlChange,
+        "Disabled" => return Err("Choose a Note, CC, or Pitch Bend feedback type first".to_string()),
+        _ => MidiMessageType::ControlChange,
+    };
+    if matches!(msg_type, MidiMessageType::ProgramChange) {
+        return Err("Program Change cannot drive LED feedback".to_string());
+    }
+    let channel = channel.min(15);
+    let controller = if matches!(msg_type, MidiMessageType::PitchBend) {
+        0
+    } else {
+        controller.min(127)
+    };
+
+    {
+        let midi = state.midi.lock().map_err(|_| "Lock poisoned".to_string())?;
+        if midi.active_routes().is_empty() {
+            return Err("Connect a MIDI input/output route before testing LED feedback".to_string());
+        }
+    }
+
+    run_logger::info(
+        "midi_cmd",
+        "test_feedback_output",
+        &format!(
+            "device_id={} channel={} controller={} msg_type={:?}",
+            device_id, channel, controller, msg_type
+        ),
+    );
+
+    let midi = Arc::clone(&state.midi);
+    tauri::async_runtime::spawn(async move {
+        // Three clear on/off pulses so a mapped LED is obvious when the address is correct.
+        for value in [1.0_f32, 0.0, 1.0, 0.0, 1.0, 0.0] {
+            if let Ok(mut guard) = midi.lock() {
+                let _ = guard.send_feedback(&device_id, channel, controller, value, msg_type.clone());
+            }
+            tokio::time::sleep(Duration::from_millis(140)).await;
+        }
+    });
+    Ok(())
 }
 
 #[cfg(test)]

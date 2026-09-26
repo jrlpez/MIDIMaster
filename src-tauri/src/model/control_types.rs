@@ -80,6 +80,23 @@ pub(super) fn default_feedback_enabled() -> bool {
     true
 }
 
+pub(super) fn default_led_intensity() -> f32 {
+    1.0
+}
+
+#[derive(Debug, Clone, Default, Serialize, Deserialize, PartialEq, Eq, Hash)]
+pub enum LedFeedbackMode {
+    #[default]
+    FollowValue,
+    AudioReactive,
+}
+
+impl LedFeedbackMode {
+    pub fn is_audio_reactive(&self) -> bool {
+        matches!(self, Self::AudioReactive)
+    }
+}
+
 #[derive(Debug, Clone, Default, Serialize, Deserialize, PartialEq, Eq, Hash)]
 pub enum RelativeFormat {
     #[default]

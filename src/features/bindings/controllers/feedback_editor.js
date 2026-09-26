@@ -7,14 +7,20 @@ export function createFeedbackEditor({
   elements,
   editorState,
   getConfigBinding,
+  invoke,
   listState,
   renderConfigPreview,
   t,
   updateAuxLearnUi,
 }) {
+  let ledTestTimer = 0;
+  let ledTestInFlight = false;
   function buttonLightOptionText(value) {
     if (value === "Disabled") {
       return t("bindings.feedbackDisabled");
+    }
+    if (value === "AudioReactive") {
+      return t("bindings.ledMusicReactive");
     }
     const mode = value === "MappedWhenAssigned" ? "MappedWhenAssigned" : normalizeButtonLightBehavior(value);
     switch (mode) {
@@ -33,7 +39,64 @@ export function createFeedbackEditor({
 
   function buttonLightSelectValue(binding) {
     if (binding?.feedback_enabled === false) return "Disabled";
+    if (binding?.led_feedback_mode === "AudioReactive") return "AudioReactive";
     return effectiveButtonLightMode(binding);
+  }
+
+  function normalizeLedIntensity(raw) {
+    const number = Number(raw);
+    if (!Number.isFinite(number)) return 1;
+    return Math.min(2, Math.max(0, number));
+  }
+
+  function ledIntensityPercent(binding) {
+    return Math.round(normalizeLedIntensity(binding?.led_intensity) * 100);
+  }
+
+  function syncLedIntensityUi(binding, options = {}) {
+    const reactive = binding?.feedback_enabled !== false && binding?.led_feedback_mode === "AudioReactive";
+    const buttonRow = elements.bindingConfigLedIntensityRow;
+    const feedbackRow = elements.bindingConfigFeedbackLedIntensityRow;
+    const showButton = options.forButton === true && reactive;
+    const showFeedback = options.forFeedback === true && reactive;
+    if (buttonRow) buttonRow.classList.toggle("hidden", !showButton);
+    if (feedbackRow) feedbackRow.classList.toggle("hidden", !showFeedback);
+    const percent = String(ledIntensityPercent(binding));
+    if (elements.bindingConfigLedIntensity) elements.bindingConfigLedIntensity.value = percent;
+    if (elements.bindingConfigLedIntensityValue) elements.bindingConfigLedIntensityValue.textContent = `${percent}%`;
+    if (elements.bindingConfigFeedbackLedIntensity) elements.bindingConfigFeedbackLedIntensity.value = percent;
+    if (elements.bindingConfigFeedbackLedIntensityValue) {
+      elements.bindingConfigFeedbackLedIntensityValue.textContent = `${percent}%`;
+    }
+  }
+
+  function updateLedIntensityFromInput(inputEl) {
+    const binding = getConfigBinding();
+    if (!binding || !inputEl) return;
+    binding.led_intensity = normalizeLedIntensity((Number(inputEl.value) || 0) / 100);
+    syncLedIntensityUi(binding, {
+      forButton: Boolean(elements.bindingConfigButtonLightSection && !elements.bindingConfigButtonLightSection.classList.contains("hidden")),
+      forFeedback: Boolean(elements.bindingConfigFeedbackOutputSection && !elements.bindingConfigFeedbackOutputSection.classList.contains("hidden")),
+    });
+    renderConfigPreview();
+  }
+
+  function syncLedModeUi(binding) {
+    if (elements.bindingConfigLedModeSelect) {
+      elements.bindingConfigLedModeSelect.value =
+        binding?.led_feedback_mode === "AudioReactive" ? "AudioReactive" : "FollowValue";
+    }
+    if (listState.ledModeDropdown && elements.bindingConfigLedModeSelect) {
+      renderNativeSelectDropdown({
+        entry: listState.ledModeDropdown,
+        selectEl: elements.bindingConfigLedModeSelect,
+        fallbackText: t("bindings.ledFollowValue"),
+        formatOptionText: (option) =>
+          option.value === "AudioReactive" ? t("bindings.ledMusicReactive") : t("bindings.ledFollowValue"),
+        truncateDisplayLabel: false,
+      });
+    }
+    syncLedIntensityUi(binding, { forFeedback: true });
   }
 
   function renderButtonLightDropdown() {
@@ -179,6 +242,7 @@ export function createFeedbackEditor({
     if (elements.bindingConfigIndicatorController)
       elements.bindingConfigIndicatorController.value = String(control?.controller ?? 0);
     renderIndicatorDropdowns();
+    syncLedIntensityUi(binding, { forButton: true });
   }
 
   function syncFeedbackOutputUi(binding, options = {}) {
@@ -212,6 +276,7 @@ export function createFeedbackEditor({
       feedbackDisabled,
     );
     renderIndicatorDropdowns();
+    syncLedModeUi(binding);
   }
 
   function updateIndicatorFromFields() {
@@ -273,6 +338,92 @@ export function createFeedbackEditor({
     renderConfigPreview();
   }
 
+  function setLedTestStatus(kind, message) {
+    for (const statusEl of [
+      elements.bindingConfigFeedbackTestStatus,
+      elements.bindingConfigIndicatorTestStatus,
+    ]) {
+      if (!statusEl) continue;
+      statusEl.textContent = message || "";
+      statusEl.classList.toggle("is-error", kind === "error");
+    }
+  }
+
+  function setLedTestBusy(busy) {
+    ledTestInFlight = busy;
+    for (const button of [elements.bindingConfigFeedbackTest, elements.bindingConfigIndicatorTest]) {
+      if (!button) continue;
+      button.disabled = busy || Boolean(editorState.learnField) || Boolean(editorState.transferPrompt);
+      button.classList.toggle("is-testing", busy);
+    }
+  }
+
+  async function testLedOutput(source = "feedback") {
+    const binding = getConfigBinding();
+    if (!binding || typeof invoke !== "function") return;
+    if (ledTestInFlight) return;
+
+    if (source === "indicator") {
+      updateIndicatorFromFields();
+    } else {
+      updateFeedbackOutputFromFields();
+    }
+    const latest = getConfigBinding();
+    if (!latest) return;
+
+    const msgType =
+      source === "indicator"
+        ? elements.bindingConfigIndicatorMsgType?.value || latest.indicator_control?.msg_type || "Note"
+        : elements.bindingConfigFeedbackMsgType?.value || latest.indicator_control?.msg_type || "ControlChange";
+    if (msgType === "Disabled") {
+      setLedTestStatus("error", t("bindings.testLedFailed", { error: t("bindings.feedbackDisabled") }));
+      return;
+    }
+
+    const channelRaw =
+      source === "indicator"
+        ? elements.bindingConfigIndicatorChannel?.value
+        : elements.bindingConfigFeedbackChannel?.value;
+    const controllerRaw =
+      source === "indicator"
+        ? elements.bindingConfigIndicatorController?.value
+        : elements.bindingConfigFeedbackController?.value;
+    const channel = clampMidiNumber((Number(channelRaw) || 1) - 1, 0, 15, 0);
+    const controller =
+      msgType === "PitchBend" ? 0 : clampMidiNumber(controllerRaw, 0, 127, latest.control?.controller ?? 0);
+    const deviceId = String(latest.indicator_control?.device_id || latest.device_id || "").trim();
+    if (!deviceId) {
+      setLedTestStatus("error", t("bindings.testLedFailed", { error: "Missing MIDI device" }));
+      return;
+    }
+
+    setLedTestBusy(true);
+    setLedTestStatus("info", t("bindings.testLedTesting"));
+    if (ledTestTimer) window.clearTimeout(ledTestTimer);
+    try {
+      // Tauri command args are camelCase on the wire (device_id → deviceId).
+      await invoke("test_midi_feedback_output", {
+        deviceId,
+        channel,
+        controller,
+        msgType,
+      });
+      setLedTestStatus("info", t("bindings.testLedDone"));
+      ledTestTimer = window.setTimeout(() => {
+        setLedTestStatus("info", "");
+        ledTestTimer = 0;
+      }, 1800);
+    } catch (error) {
+      const raw = error?.message || String(error || "Unknown error");
+      // Prefer the human-readable tail of Tauri IPC errors over the full arg dump.
+      const message = raw.includes(": ") ? raw.slice(raw.lastIndexOf(": ") + 2).trim() || raw : raw;
+      setLedTestStatus("error", t("bindings.testLedFailed", { error: message }));
+    } finally {
+      // Keep the button busy for the full pulse sequence so users don't stack tests.
+      window.setTimeout(() => setLedTestBusy(false), 900);
+    }
+  }
+
   return {
     buttonLightSelectValue,
     renderButtonLightDropdown,
@@ -281,7 +432,11 @@ export function createFeedbackEditor({
     syncFeedbackControllerInputState,
     syncIndicatorUi,
     syncFeedbackOutputUi,
+    syncLedModeUi,
+    syncLedIntensityUi,
+    testLedOutput,
     updateIndicatorFromFields,
     updateFeedbackOutputFromFields,
+    updateLedIntensityFromInput,
   };
 }

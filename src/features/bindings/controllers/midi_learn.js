@@ -75,6 +75,13 @@ export function createMidiLearn({
     if (assignClear) assignClear.disabled = lockClear;
     if (indicatorClear) indicatorClear.disabled = lockClear || buttonFeedbackDisabled;
     if (feedbackClear) feedbackClear.disabled = lockClear;
+    if (elements.bindingConfigFeedbackTest) {
+      elements.bindingConfigFeedbackTest.disabled =
+        lockClear || feedbackDisabled || elements.bindingConfigFeedbackMsgType?.value === "Disabled";
+    }
+    if (elements.bindingConfigIndicatorTest) {
+      elements.bindingConfigIndicatorTest.disabled = lockClear || buttonFeedbackDisabled;
+    }
     if (elements.bindingConfigIndicatorMsgType)
       elements.bindingConfigIndicatorMsgType.disabled = lockClear || buttonFeedbackDisabled;
     if (elements.bindingConfigIndicatorChannel)
