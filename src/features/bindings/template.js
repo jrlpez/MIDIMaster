@@ -83,6 +83,12 @@ export const bindingsTemplate = `<div id="binding-config-panel" class="target-pa
                     </svg>
                   </button>
                 </div>
+                <div class="binding-config-feedback-test-row">
+                  <button id="binding-config-indicator-test" type="button" class="binding-config-button binding-config-button--secondary binding-config-feedback-test" data-i18n="bindings.testLed" data-i18n-title="bindings.testLedHelp" title="Flash the configured LED address three times">
+                    Test LED
+                  </button>
+                  <span id="binding-config-indicator-test-status" class="binding-config-feedback-test-status" role="status" aria-live="polite"></span>
+                </div>
               </div>
             </section>
 
@@ -281,6 +287,12 @@ export const bindingsTemplate = `<div id="binding-config-panel" class="target-pa
                       <path d="M5.5 12A7 7 0 1 0 8 6.7L4 10.5"></path>
                     </svg>
                   </button>
+                </div>
+                <div class="binding-config-feedback-test-row">
+                  <button id="binding-config-feedback-test" type="button" class="binding-config-button binding-config-button--secondary binding-config-feedback-test" data-i18n="bindings.testLed" data-i18n-title="bindings.testLedHelp" title="Flash the configured LED address three times">
+                    Test LED
+                  </button>
+                  <span id="binding-config-feedback-test-status" class="binding-config-feedback-test-status" role="status" aria-live="polite"></span>
                 </div>
               </div>
             </section>

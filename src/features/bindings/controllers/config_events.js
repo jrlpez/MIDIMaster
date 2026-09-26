@@ -48,6 +48,7 @@ export function createConfigEvents({
   syncIndicatorUi,
   syncMuteModeUi,
   t,
+  testLedOutput,
   updateAuxLearnUi,
   updateCustomCurveFromPointer,
   updateFeedbackOutputFromFields,
@@ -176,6 +177,16 @@ export function createConfigEvents({
     if (elements.bindingConfigFeedbackLedIntensity) {
       lifetime.listen(elements.bindingConfigFeedbackLedIntensity, "input", () => {
         updateLedIntensityFromInput(elements.bindingConfigFeedbackLedIntensity);
+      });
+    }
+    if (elements.bindingConfigFeedbackTest) {
+      lifetime.listen(elements.bindingConfigFeedbackTest, "click", () => {
+        testLedOutput("feedback").catch((err) => console.error("LED test failed:", err));
+      });
+    }
+    if (elements.bindingConfigIndicatorTest) {
+      lifetime.listen(elements.bindingConfigIndicatorTest, "click", () => {
+        testLedOutput("indicator").catch((err) => console.error("LED test failed:", err));
       });
     }
     lifetime.listen(elements.bindingConfigIndicatorMsgType, "change", updateIndicatorFromFields);

@@ -690,5 +690,10 @@
   "bindings.ledFollowValue": "Follow Value",
   "bindings.ledMusicReactive": "Music Reactive",
   "bindings.ledIntensity": "LED intensity",
-  "bindings.ledIntensityHelp": "How strongly the light reacts to audio peaks."
+  "bindings.ledIntensityHelp": "How strongly the light reacts to audio peaks.",
+  "bindings.testLed": "Test LED",
+  "bindings.testLedHelp": "Flash the configured LED address three times.",
+  "bindings.testLedTesting": "Flashing LED…",
+  "bindings.testLedDone": "Test pulse sent.",
+  "bindings.testLedFailed": "LED test failed: {error}"
 }

@@ -7,11 +7,14 @@ export function createFeedbackEditor({
   elements,
   editorState,
   getConfigBinding,
+  invoke,
   listState,
   renderConfigPreview,
   t,
   updateAuxLearnUi,
 }) {
+  let ledTestTimer = 0;
+  let ledTestInFlight = false;
   function buttonLightOptionText(value) {
     if (value === "Disabled") {
       return t("bindings.feedbackDisabled");
@@ -335,6 +338,89 @@ export function createFeedbackEditor({
     renderConfigPreview();
   }
 
+  function setLedTestStatus(kind, message) {
+    for (const statusEl of [
+      elements.bindingConfigFeedbackTestStatus,
+      elements.bindingConfigIndicatorTestStatus,
+    ]) {
+      if (!statusEl) continue;
+      statusEl.textContent = message || "";
+      statusEl.classList.toggle("is-error", kind === "error");
+    }
+  }
+
+  function setLedTestBusy(busy) {
+    ledTestInFlight = busy;
+    for (const button of [elements.bindingConfigFeedbackTest, elements.bindingConfigIndicatorTest]) {
+      if (!button) continue;
+      button.disabled = busy || Boolean(editorState.learnField) || Boolean(editorState.transferPrompt);
+      button.classList.toggle("is-testing", busy);
+    }
+  }
+
+  async function testLedOutput(source = "feedback") {
+    const binding = getConfigBinding();
+    if (!binding || typeof invoke !== "function") return;
+    if (ledTestInFlight) return;
+
+    if (source === "indicator") {
+      updateIndicatorFromFields();
+    } else {
+      updateFeedbackOutputFromFields();
+    }
+    const latest = getConfigBinding();
+    if (!latest) return;
+
+    const msgType =
+      source === "indicator"
+        ? elements.bindingConfigIndicatorMsgType?.value || latest.indicator_control?.msg_type || "Note"
+        : elements.bindingConfigFeedbackMsgType?.value || latest.indicator_control?.msg_type || "ControlChange";
+    if (msgType === "Disabled") {
+      setLedTestStatus("error", t("bindings.testLedFailed", { error: t("bindings.feedbackDisabled") }));
+      return;
+    }
+
+    const channelRaw =
+      source === "indicator"
+        ? elements.bindingConfigIndicatorChannel?.value
+        : elements.bindingConfigFeedbackChannel?.value;
+    const controllerRaw =
+      source === "indicator"
+        ? elements.bindingConfigIndicatorController?.value
+        : elements.bindingConfigFeedbackController?.value;
+    const channel = clampMidiNumber((Number(channelRaw) || 1) - 1, 0, 15, 0);
+    const controller =
+      msgType === "PitchBend" ? 0 : clampMidiNumber(controllerRaw, 0, 127, latest.control?.controller ?? 0);
+    const deviceId = String(latest.indicator_control?.device_id || latest.device_id || "").trim();
+    if (!deviceId) {
+      setLedTestStatus("error", t("bindings.testLedFailed", { error: "Missing MIDI device" }));
+      return;
+    }
+
+    setLedTestBusy(true);
+    setLedTestStatus("info", t("bindings.testLedTesting"));
+    if (ledTestTimer) window.clearTimeout(ledTestTimer);
+    try {
+      await invoke("test_midi_feedback_output", {
+        device_id: deviceId,
+        channel,
+        controller,
+        msg_type: msgType,
+      });
+      setLedTestStatus("info", t("bindings.testLedDone"));
+      ledTestTimer = window.setTimeout(() => {
+        setLedTestStatus("info", "");
+        ledTestTimer = 0;
+      }, 1800);
+    } catch (error) {
+      const message = error?.message || String(error || "Unknown error");
+      setLedTestStatus("error", t("bindings.testLedFailed", { error: message }));
+    } finally {
+      // Keep the button busy for the full pulse sequence so users don't stack tests.
+      window.setTimeout(() => setLedTestBusy(false), 900);
+    }
+  }
+
   return {
     buttonLightSelectValue,
     renderButtonLightDropdown,
@@ -345,6 +431,7 @@ export function createFeedbackEditor({
     syncFeedbackOutputUi,
     syncLedModeUi,
     syncLedIntensityUi,
+    testLedOutput,
     updateIndicatorFromFields,
     updateFeedbackOutputFromFields,
     updateLedIntensityFromInput,

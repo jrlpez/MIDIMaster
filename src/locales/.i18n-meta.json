@@ -689,7 +689,12 @@
     "bindings.ledFollowValue": "c03c266e971f4a504e7dd0aa4166d73ea6c91fce08d035815b7e63b43747f32f",
     "bindings.ledMusicReactive": "b65d5988ffa274aafe9411bfd2fa47e5e2437019729c9b64a56293648423a19a",
     "bindings.ledIntensity": "aa53d5a8931523221e560531cb9fb874ed80c0fe812dcbe151784c669fc50052",
-    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da"
+    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da",
+    "bindings.testLed": "80ccc51db9708fb9e6e053877a81fca717ca0348be079cf746f8446a878bd083",
+    "bindings.testLedHelp": "76129f95c4917ccc81da4a9cafa5523856933aadff158bbfd4c8023ebd4d1c66",
+    "bindings.testLedTesting": "f411c8dfb627c9040c05ca2800031645dfdd82bb1dab0c7b46d950781f760972",
+    "bindings.testLedDone": "1faf9a55f725b69eeaea74eea513851695809fc837fad490983c5f70b4ea75b6",
+    "bindings.testLedFailed": "da6748dec806bdb84ed0e2bd1c1e41658063fc636e7e9c3a26169543cd0445a1"
   },
   "es": {
     "bindings.feedbackDisabled": "75081b593d15cf6e631971bc6768723f593b88b172477e40ae7d363e4829816d",
@@ -1381,7 +1386,12 @@
     "bindings.ledFollowValue": "c03c266e971f4a504e7dd0aa4166d73ea6c91fce08d035815b7e63b43747f32f",
     "bindings.ledMusicReactive": "b65d5988ffa274aafe9411bfd2fa47e5e2437019729c9b64a56293648423a19a",
     "bindings.ledIntensity": "aa53d5a8931523221e560531cb9fb874ed80c0fe812dcbe151784c669fc50052",
-    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da"
+    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da",
+    "bindings.testLed": "80ccc51db9708fb9e6e053877a81fca717ca0348be079cf746f8446a878bd083",
+    "bindings.testLedHelp": "76129f95c4917ccc81da4a9cafa5523856933aadff158bbfd4c8023ebd4d1c66",
+    "bindings.testLedTesting": "f411c8dfb627c9040c05ca2800031645dfdd82bb1dab0c7b46d950781f760972",
+    "bindings.testLedDone": "1faf9a55f725b69eeaea74eea513851695809fc837fad490983c5f70b4ea75b6",
+    "bindings.testLedFailed": "da6748dec806bdb84ed0e2bd1c1e41658063fc636e7e9c3a26169543cd0445a1"
   },
   "de": {
     "bindings.feedbackDisabled": "75081b593d15cf6e631971bc6768723f593b88b172477e40ae7d363e4829816d",
@@ -2073,7 +2083,12 @@
     "bindings.ledFollowValue": "c03c266e971f4a504e7dd0aa4166d73ea6c91fce08d035815b7e63b43747f32f",
     "bindings.ledMusicReactive": "b65d5988ffa274aafe9411bfd2fa47e5e2437019729c9b64a56293648423a19a",
     "bindings.ledIntensity": "aa53d5a8931523221e560531cb9fb874ed80c0fe812dcbe151784c669fc50052",
-    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da"
+    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da",
+    "bindings.testLed": "80ccc51db9708fb9e6e053877a81fca717ca0348be079cf746f8446a878bd083",
+    "bindings.testLedHelp": "76129f95c4917ccc81da4a9cafa5523856933aadff158bbfd4c8023ebd4d1c66",
+    "bindings.testLedTesting": "f411c8dfb627c9040c05ca2800031645dfdd82bb1dab0c7b46d950781f760972",
+    "bindings.testLedDone": "1faf9a55f725b69eeaea74eea513851695809fc837fad490983c5f70b4ea75b6",
+    "bindings.testLedFailed": "da6748dec806bdb84ed0e2bd1c1e41658063fc636e7e9c3a26169543cd0445a1"
   },
   "it": {
     "bindings.feedbackDisabled": "75081b593d15cf6e631971bc6768723f593b88b172477e40ae7d363e4829816d",
@@ -2765,7 +2780,12 @@
     "bindings.ledFollowValue": "c03c266e971f4a504e7dd0aa4166d73ea6c91fce08d035815b7e63b43747f32f",
     "bindings.ledMusicReactive": "b65d5988ffa274aafe9411bfd2fa47e5e2437019729c9b64a56293648423a19a",
     "bindings.ledIntensity": "aa53d5a8931523221e560531cb9fb874ed80c0fe812dcbe151784c669fc50052",
-    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da"
+    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da",
+    "bindings.testLed": "80ccc51db9708fb9e6e053877a81fca717ca0348be079cf746f8446a878bd083",
+    "bindings.testLedHelp": "76129f95c4917ccc81da4a9cafa5523856933aadff158bbfd4c8023ebd4d1c66",
+    "bindings.testLedTesting": "f411c8dfb627c9040c05ca2800031645dfdd82bb1dab0c7b46d950781f760972",
+    "bindings.testLedDone": "1faf9a55f725b69eeaea74eea513851695809fc837fad490983c5f70b4ea75b6",
+    "bindings.testLedFailed": "da6748dec806bdb84ed0e2bd1c1e41658063fc636e7e9c3a26169543cd0445a1"
   },
   "pt-BR": {
     "bindings.feedbackDisabled": "75081b593d15cf6e631971bc6768723f593b88b172477e40ae7d363e4829816d",
@@ -3457,7 +3477,12 @@
     "bindings.ledFollowValue": "c03c266e971f4a504e7dd0aa4166d73ea6c91fce08d035815b7e63b43747f32f",
     "bindings.ledMusicReactive": "b65d5988ffa274aafe9411bfd2fa47e5e2437019729c9b64a56293648423a19a",
     "bindings.ledIntensity": "aa53d5a8931523221e560531cb9fb874ed80c0fe812dcbe151784c669fc50052",
-    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da"
+    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da",
+    "bindings.testLed": "80ccc51db9708fb9e6e053877a81fca717ca0348be079cf746f8446a878bd083",
+    "bindings.testLedHelp": "76129f95c4917ccc81da4a9cafa5523856933aadff158bbfd4c8023ebd4d1c66",
+    "bindings.testLedTesting": "f411c8dfb627c9040c05ca2800031645dfdd82bb1dab0c7b46d950781f760972",
+    "bindings.testLedDone": "1faf9a55f725b69eeaea74eea513851695809fc837fad490983c5f70b4ea75b6",
+    "bindings.testLedFailed": "da6748dec806bdb84ed0e2bd1c1e41658063fc636e7e9c3a26169543cd0445a1"
   },
   "nl": {
     "bindings.feedbackDisabled": "75081b593d15cf6e631971bc6768723f593b88b172477e40ae7d363e4829816d",
@@ -4149,7 +4174,12 @@
     "bindings.ledFollowValue": "c03c266e971f4a504e7dd0aa4166d73ea6c91fce08d035815b7e63b43747f32f",
     "bindings.ledMusicReactive": "b65d5988ffa274aafe9411bfd2fa47e5e2437019729c9b64a56293648423a19a",
     "bindings.ledIntensity": "aa53d5a8931523221e560531cb9fb874ed80c0fe812dcbe151784c669fc50052",
-    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da"
+    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da",
+    "bindings.testLed": "80ccc51db9708fb9e6e053877a81fca717ca0348be079cf746f8446a878bd083",
+    "bindings.testLedHelp": "76129f95c4917ccc81da4a9cafa5523856933aadff158bbfd4c8023ebd4d1c66",
+    "bindings.testLedTesting": "f411c8dfb627c9040c05ca2800031645dfdd82bb1dab0c7b46d950781f760972",
+    "bindings.testLedDone": "1faf9a55f725b69eeaea74eea513851695809fc837fad490983c5f70b4ea75b6",
+    "bindings.testLedFailed": "da6748dec806bdb84ed0e2bd1c1e41658063fc636e7e9c3a26169543cd0445a1"
   },
   "pl": {
     "bindings.feedbackDisabled": "75081b593d15cf6e631971bc6768723f593b88b172477e40ae7d363e4829816d",
@@ -4841,7 +4871,12 @@
     "bindings.ledFollowValue": "c03c266e971f4a504e7dd0aa4166d73ea6c91fce08d035815b7e63b43747f32f",
     "bindings.ledMusicReactive": "b65d5988ffa274aafe9411bfd2fa47e5e2437019729c9b64a56293648423a19a",
     "bindings.ledIntensity": "aa53d5a8931523221e560531cb9fb874ed80c0fe812dcbe151784c669fc50052",
-    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da"
+    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da",
+    "bindings.testLed": "80ccc51db9708fb9e6e053877a81fca717ca0348be079cf746f8446a878bd083",
+    "bindings.testLedHelp": "76129f95c4917ccc81da4a9cafa5523856933aadff158bbfd4c8023ebd4d1c66",
+    "bindings.testLedTesting": "f411c8dfb627c9040c05ca2800031645dfdd82bb1dab0c7b46d950781f760972",
+    "bindings.testLedDone": "1faf9a55f725b69eeaea74eea513851695809fc837fad490983c5f70b4ea75b6",
+    "bindings.testLedFailed": "da6748dec806bdb84ed0e2bd1c1e41658063fc636e7e9c3a26169543cd0445a1"
   },
   "ja": {
     "bindings.feedbackDisabled": "75081b593d15cf6e631971bc6768723f593b88b172477e40ae7d363e4829816d",
@@ -5533,7 +5568,12 @@
     "bindings.ledFollowValue": "c03c266e971f4a504e7dd0aa4166d73ea6c91fce08d035815b7e63b43747f32f",
     "bindings.ledMusicReactive": "b65d5988ffa274aafe9411bfd2fa47e5e2437019729c9b64a56293648423a19a",
     "bindings.ledIntensity": "aa53d5a8931523221e560531cb9fb874ed80c0fe812dcbe151784c669fc50052",
-    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da"
+    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da",
+    "bindings.testLed": "80ccc51db9708fb9e6e053877a81fca717ca0348be079cf746f8446a878bd083",
+    "bindings.testLedHelp": "76129f95c4917ccc81da4a9cafa5523856933aadff158bbfd4c8023ebd4d1c66",
+    "bindings.testLedTesting": "f411c8dfb627c9040c05ca2800031645dfdd82bb1dab0c7b46d950781f760972",
+    "bindings.testLedDone": "1faf9a55f725b69eeaea74eea513851695809fc837fad490983c5f70b4ea75b6",
+    "bindings.testLedFailed": "da6748dec806bdb84ed0e2bd1c1e41658063fc636e7e9c3a26169543cd0445a1"
   },
   "ko": {
     "bindings.feedbackDisabled": "75081b593d15cf6e631971bc6768723f593b88b172477e40ae7d363e4829816d",
@@ -6225,7 +6265,12 @@
     "bindings.ledFollowValue": "c03c266e971f4a504e7dd0aa4166d73ea6c91fce08d035815b7e63b43747f32f",
     "bindings.ledMusicReactive": "b65d5988ffa274aafe9411bfd2fa47e5e2437019729c9b64a56293648423a19a",
     "bindings.ledIntensity": "aa53d5a8931523221e560531cb9fb874ed80c0fe812dcbe151784c669fc50052",
-    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da"
+    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da",
+    "bindings.testLed": "80ccc51db9708fb9e6e053877a81fca717ca0348be079cf746f8446a878bd083",
+    "bindings.testLedHelp": "76129f95c4917ccc81da4a9cafa5523856933aadff158bbfd4c8023ebd4d1c66",
+    "bindings.testLedTesting": "f411c8dfb627c9040c05ca2800031645dfdd82bb1dab0c7b46d950781f760972",
+    "bindings.testLedDone": "1faf9a55f725b69eeaea74eea513851695809fc837fad490983c5f70b4ea75b6",
+    "bindings.testLedFailed": "da6748dec806bdb84ed0e2bd1c1e41658063fc636e7e9c3a26169543cd0445a1"
   },
   "zh-Hans": {
     "bindings.feedbackDisabled": "75081b593d15cf6e631971bc6768723f593b88b172477e40ae7d363e4829816d",
@@ -6917,7 +6962,12 @@
     "bindings.ledFollowValue": "c03c266e971f4a504e7dd0aa4166d73ea6c91fce08d035815b7e63b43747f32f",
     "bindings.ledMusicReactive": "b65d5988ffa274aafe9411bfd2fa47e5e2437019729c9b64a56293648423a19a",
     "bindings.ledIntensity": "aa53d5a8931523221e560531cb9fb874ed80c0fe812dcbe151784c669fc50052",
-    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da"
+    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da",
+    "bindings.testLed": "80ccc51db9708fb9e6e053877a81fca717ca0348be079cf746f8446a878bd083",
+    "bindings.testLedHelp": "76129f95c4917ccc81da4a9cafa5523856933aadff158bbfd4c8023ebd4d1c66",
+    "bindings.testLedTesting": "f411c8dfb627c9040c05ca2800031645dfdd82bb1dab0c7b46d950781f760972",
+    "bindings.testLedDone": "1faf9a55f725b69eeaea74eea513851695809fc837fad490983c5f70b4ea75b6",
+    "bindings.testLedFailed": "da6748dec806bdb84ed0e2bd1c1e41658063fc636e7e9c3a26169543cd0445a1"
   },
   "settings.appearance.description": "Customize how MIDIMaster looks and feels.",
   "settings.appearance.themePresets": "Theme Presets",

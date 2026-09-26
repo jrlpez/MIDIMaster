@@ -168,6 +168,38 @@
   height: 40px;
 }
 
+.binding-config-feedback-test-row {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding-top: 4px;
+}
+
+.binding-config-feedback-test {
+  min-width: 110px;
+  height: 40px;
+  padding: 0 14px;
+  font-weight: 700;
+}
+
+.binding-config-feedback-test.is-testing {
+  opacity: 0.72;
+}
+
+.binding-config-feedback-test-status {
+  min-width: 0;
+  color: #93a5c4;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.binding-config-feedback-test-status.is-error {
+  color: #ff8f8f;
+}
+
 @media (max-width: 720px) {
   .binding-config-indicator-custom {
     grid-template-columns: minmax(104px, 1fr) minmax(68px, 0.7fr) minmax(78px, 0.8fr) 40px 40px;
