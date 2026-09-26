@@ -549,7 +549,7 @@
     "bindings.curvePresetLimitTitle": "b33a8e7cbaed93c7eeb49c54b4a12612c7fa20bee0a2520312a3d0f3fea53394",
     "bindings.curvePresetLimitMessage": "1b3c21265d97324dbc5345108e1ea4358e6e45e8726f2a399ed46d5090037911",
     "bindings.feedbackOutput": "18a90388ccba3cfbe9d0b7b37e74ad1239215a09b41c51ecc999486674c97528",
-    "bindings.feedbackOutputHelp": "96764e2359e9d5b72d27eca432f50ab883641f0271493c8e0bebe737052e1199",
+    "bindings.feedbackOutputHelp": "b0ec3a985b218f4d39cc8835ef15895464050dcb43f4c506c3963634fa66d92c",
     "bindings.feedbackMessageType": "122d60a966c83521205723b6dbed144d944bea93e0724cd15442206429e2e0eb",
     "bindings.feedbackChannelLabel": "cf0742ac1ad150bacbf7c980c7f93dc770afb1dfd054615f18b68fde2f47a85f",
     "bindings.feedbackControlLabel": "7ca8405192dd40c79ae4be7e773355f582534b968090ce8af43f7d16c889d8fb",
@@ -683,7 +683,13 @@
     "virtualAudio.blockedUnsafeVersion": "858883278e55cfe3ffbeadabc9eb288ed4847d49c9f88f876fd00dfc5a78d6d0",
     "virtualAudio.blockedUnknownVersion": "39529aa8adce738e281f3ba1c1ae94eef99a60be3aba0200058539607a750d1f",
     "virtualAudio.copyDiagnostics": "87a3f848e997fe63746507a102205aa488043077ff797741494d1fadc77cbe6a",
-    "virtualAudio.diagnosticsCopied": "18e9da0fd761b965e5cd4c3e7adcfe7e6fb9f691484c06c98a894c6dea57c077"
+    "virtualAudio.diagnosticsCopied": "18e9da0fd761b965e5cd4c3e7adcfe7e6fb9f691484c06c98a894c6dea57c077",
+    "bindings.ledMode": "8b797e51f1310507dcdfef4cf8dc8db164afe34a3ad5595e454bb0b24e6c18cb",
+    "bindings.ledModeHelp": "e1fdb51d3321ded27e44b28d52acea95e94aa578e23fcd3dde0e8590322e94b1",
+    "bindings.ledFollowValue": "c03c266e971f4a504e7dd0aa4166d73ea6c91fce08d035815b7e63b43747f32f",
+    "bindings.ledMusicReactive": "b65d5988ffa274aafe9411bfd2fa47e5e2437019729c9b64a56293648423a19a",
+    "bindings.ledIntensity": "aa53d5a8931523221e560531cb9fb874ed80c0fe812dcbe151784c669fc50052",
+    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da"
   },
   "es": {
     "bindings.feedbackDisabled": "75081b593d15cf6e631971bc6768723f593b88b172477e40ae7d363e4829816d",
@@ -1235,7 +1241,7 @@
     "bindings.curvePresetLimitTitle": "b33a8e7cbaed93c7eeb49c54b4a12612c7fa20bee0a2520312a3d0f3fea53394",
     "bindings.curvePresetLimitMessage": "1b3c21265d97324dbc5345108e1ea4358e6e45e8726f2a399ed46d5090037911",
     "bindings.feedbackOutput": "18a90388ccba3cfbe9d0b7b37e74ad1239215a09b41c51ecc999486674c97528",
-    "bindings.feedbackOutputHelp": "96764e2359e9d5b72d27eca432f50ab883641f0271493c8e0bebe737052e1199",
+    "bindings.feedbackOutputHelp": "b0ec3a985b218f4d39cc8835ef15895464050dcb43f4c506c3963634fa66d92c",
     "bindings.feedbackMessageType": "122d60a966c83521205723b6dbed144d944bea93e0724cd15442206429e2e0eb",
     "bindings.feedbackChannelLabel": "cf0742ac1ad150bacbf7c980c7f93dc770afb1dfd054615f18b68fde2f47a85f",
     "bindings.feedbackControlLabel": "7ca8405192dd40c79ae4be7e773355f582534b968090ce8af43f7d16c889d8fb",
@@ -1369,7 +1375,13 @@
     "virtualAudio.blockedUnsafeVersion": "858883278e55cfe3ffbeadabc9eb288ed4847d49c9f88f876fd00dfc5a78d6d0",
     "virtualAudio.blockedUnknownVersion": "39529aa8adce738e281f3ba1c1ae94eef99a60be3aba0200058539607a750d1f",
     "virtualAudio.copyDiagnostics": "87a3f848e997fe63746507a102205aa488043077ff797741494d1fadc77cbe6a",
-    "virtualAudio.diagnosticsCopied": "18e9da0fd761b965e5cd4c3e7adcfe7e6fb9f691484c06c98a894c6dea57c077"
+    "virtualAudio.diagnosticsCopied": "18e9da0fd761b965e5cd4c3e7adcfe7e6fb9f691484c06c98a894c6dea57c077",
+    "bindings.ledMode": "8b797e51f1310507dcdfef4cf8dc8db164afe34a3ad5595e454bb0b24e6c18cb",
+    "bindings.ledModeHelp": "e1fdb51d3321ded27e44b28d52acea95e94aa578e23fcd3dde0e8590322e94b1",
+    "bindings.ledFollowValue": "c03c266e971f4a504e7dd0aa4166d73ea6c91fce08d035815b7e63b43747f32f",
+    "bindings.ledMusicReactive": "b65d5988ffa274aafe9411bfd2fa47e5e2437019729c9b64a56293648423a19a",
+    "bindings.ledIntensity": "aa53d5a8931523221e560531cb9fb874ed80c0fe812dcbe151784c669fc50052",
+    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da"
   },
   "de": {
     "bindings.feedbackDisabled": "75081b593d15cf6e631971bc6768723f593b88b172477e40ae7d363e4829816d",
@@ -1921,7 +1933,7 @@
     "bindings.curvePresetLimitTitle": "b33a8e7cbaed93c7eeb49c54b4a12612c7fa20bee0a2520312a3d0f3fea53394",
     "bindings.curvePresetLimitMessage": "1b3c21265d97324dbc5345108e1ea4358e6e45e8726f2a399ed46d5090037911",
     "bindings.feedbackOutput": "18a90388ccba3cfbe9d0b7b37e74ad1239215a09b41c51ecc999486674c97528",
-    "bindings.feedbackOutputHelp": "96764e2359e9d5b72d27eca432f50ab883641f0271493c8e0bebe737052e1199",
+    "bindings.feedbackOutputHelp": "b0ec3a985b218f4d39cc8835ef15895464050dcb43f4c506c3963634fa66d92c",
     "bindings.feedbackMessageType": "122d60a966c83521205723b6dbed144d944bea93e0724cd15442206429e2e0eb",
     "bindings.feedbackChannelLabel": "cf0742ac1ad150bacbf7c980c7f93dc770afb1dfd054615f18b68fde2f47a85f",
     "bindings.feedbackControlLabel": "7ca8405192dd40c79ae4be7e773355f582534b968090ce8af43f7d16c889d8fb",
@@ -2055,7 +2067,13 @@
     "virtualAudio.blockedUnsafeVersion": "858883278e55cfe3ffbeadabc9eb288ed4847d49c9f88f876fd00dfc5a78d6d0",
     "virtualAudio.blockedUnknownVersion": "39529aa8adce738e281f3ba1c1ae94eef99a60be3aba0200058539607a750d1f",
     "virtualAudio.copyDiagnostics": "87a3f848e997fe63746507a102205aa488043077ff797741494d1fadc77cbe6a",
-    "virtualAudio.diagnosticsCopied": "18e9da0fd761b965e5cd4c3e7adcfe7e6fb9f691484c06c98a894c6dea57c077"
+    "virtualAudio.diagnosticsCopied": "18e9da0fd761b965e5cd4c3e7adcfe7e6fb9f691484c06c98a894c6dea57c077",
+    "bindings.ledMode": "8b797e51f1310507dcdfef4cf8dc8db164afe34a3ad5595e454bb0b24e6c18cb",
+    "bindings.ledModeHelp": "e1fdb51d3321ded27e44b28d52acea95e94aa578e23fcd3dde0e8590322e94b1",
+    "bindings.ledFollowValue": "c03c266e971f4a504e7dd0aa4166d73ea6c91fce08d035815b7e63b43747f32f",
+    "bindings.ledMusicReactive": "b65d5988ffa274aafe9411bfd2fa47e5e2437019729c9b64a56293648423a19a",
+    "bindings.ledIntensity": "aa53d5a8931523221e560531cb9fb874ed80c0fe812dcbe151784c669fc50052",
+    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da"
   },
   "it": {
     "bindings.feedbackDisabled": "75081b593d15cf6e631971bc6768723f593b88b172477e40ae7d363e4829816d",
@@ -2607,7 +2625,7 @@
     "bindings.curvePresetLimitTitle": "b33a8e7cbaed93c7eeb49c54b4a12612c7fa20bee0a2520312a3d0f3fea53394",
     "bindings.curvePresetLimitMessage": "1b3c21265d97324dbc5345108e1ea4358e6e45e8726f2a399ed46d5090037911",
     "bindings.feedbackOutput": "18a90388ccba3cfbe9d0b7b37e74ad1239215a09b41c51ecc999486674c97528",
-    "bindings.feedbackOutputHelp": "96764e2359e9d5b72d27eca432f50ab883641f0271493c8e0bebe737052e1199",
+    "bindings.feedbackOutputHelp": "b0ec3a985b218f4d39cc8835ef15895464050dcb43f4c506c3963634fa66d92c",
     "bindings.feedbackMessageType": "122d60a966c83521205723b6dbed144d944bea93e0724cd15442206429e2e0eb",
     "bindings.feedbackChannelLabel": "cf0742ac1ad150bacbf7c980c7f93dc770afb1dfd054615f18b68fde2f47a85f",
     "bindings.feedbackControlLabel": "7ca8405192dd40c79ae4be7e773355f582534b968090ce8af43f7d16c889d8fb",
@@ -2741,7 +2759,13 @@
     "virtualAudio.blockedUnsafeVersion": "858883278e55cfe3ffbeadabc9eb288ed4847d49c9f88f876fd00dfc5a78d6d0",
     "virtualAudio.blockedUnknownVersion": "39529aa8adce738e281f3ba1c1ae94eef99a60be3aba0200058539607a750d1f",
     "virtualAudio.copyDiagnostics": "87a3f848e997fe63746507a102205aa488043077ff797741494d1fadc77cbe6a",
-    "virtualAudio.diagnosticsCopied": "18e9da0fd761b965e5cd4c3e7adcfe7e6fb9f691484c06c98a894c6dea57c077"
+    "virtualAudio.diagnosticsCopied": "18e9da0fd761b965e5cd4c3e7adcfe7e6fb9f691484c06c98a894c6dea57c077",
+    "bindings.ledMode": "8b797e51f1310507dcdfef4cf8dc8db164afe34a3ad5595e454bb0b24e6c18cb",
+    "bindings.ledModeHelp": "e1fdb51d3321ded27e44b28d52acea95e94aa578e23fcd3dde0e8590322e94b1",
+    "bindings.ledFollowValue": "c03c266e971f4a504e7dd0aa4166d73ea6c91fce08d035815b7e63b43747f32f",
+    "bindings.ledMusicReactive": "b65d5988ffa274aafe9411bfd2fa47e5e2437019729c9b64a56293648423a19a",
+    "bindings.ledIntensity": "aa53d5a8931523221e560531cb9fb874ed80c0fe812dcbe151784c669fc50052",
+    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da"
   },
   "pt-BR": {
     "bindings.feedbackDisabled": "75081b593d15cf6e631971bc6768723f593b88b172477e40ae7d363e4829816d",
@@ -3293,7 +3317,7 @@
     "bindings.curvePresetLimitTitle": "b33a8e7cbaed93c7eeb49c54b4a12612c7fa20bee0a2520312a3d0f3fea53394",
     "bindings.curvePresetLimitMessage": "1b3c21265d97324dbc5345108e1ea4358e6e45e8726f2a399ed46d5090037911",
     "bindings.feedbackOutput": "18a90388ccba3cfbe9d0b7b37e74ad1239215a09b41c51ecc999486674c97528",
-    "bindings.feedbackOutputHelp": "96764e2359e9d5b72d27eca432f50ab883641f0271493c8e0bebe737052e1199",
+    "bindings.feedbackOutputHelp": "b0ec3a985b218f4d39cc8835ef15895464050dcb43f4c506c3963634fa66d92c",
     "bindings.feedbackMessageType": "122d60a966c83521205723b6dbed144d944bea93e0724cd15442206429e2e0eb",
     "bindings.feedbackChannelLabel": "cf0742ac1ad150bacbf7c980c7f93dc770afb1dfd054615f18b68fde2f47a85f",
     "bindings.feedbackControlLabel": "7ca8405192dd40c79ae4be7e773355f582534b968090ce8af43f7d16c889d8fb",
@@ -3427,7 +3451,13 @@
     "virtualAudio.blockedUnsafeVersion": "858883278e55cfe3ffbeadabc9eb288ed4847d49c9f88f876fd00dfc5a78d6d0",
     "virtualAudio.blockedUnknownVersion": "39529aa8adce738e281f3ba1c1ae94eef99a60be3aba0200058539607a750d1f",
     "virtualAudio.copyDiagnostics": "87a3f848e997fe63746507a102205aa488043077ff797741494d1fadc77cbe6a",
-    "virtualAudio.diagnosticsCopied": "18e9da0fd761b965e5cd4c3e7adcfe7e6fb9f691484c06c98a894c6dea57c077"
+    "virtualAudio.diagnosticsCopied": "18e9da0fd761b965e5cd4c3e7adcfe7e6fb9f691484c06c98a894c6dea57c077",
+    "bindings.ledMode": "8b797e51f1310507dcdfef4cf8dc8db164afe34a3ad5595e454bb0b24e6c18cb",
+    "bindings.ledModeHelp": "e1fdb51d3321ded27e44b28d52acea95e94aa578e23fcd3dde0e8590322e94b1",
+    "bindings.ledFollowValue": "c03c266e971f4a504e7dd0aa4166d73ea6c91fce08d035815b7e63b43747f32f",
+    "bindings.ledMusicReactive": "b65d5988ffa274aafe9411bfd2fa47e5e2437019729c9b64a56293648423a19a",
+    "bindings.ledIntensity": "aa53d5a8931523221e560531cb9fb874ed80c0fe812dcbe151784c669fc50052",
+    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da"
   },
   "nl": {
     "bindings.feedbackDisabled": "75081b593d15cf6e631971bc6768723f593b88b172477e40ae7d363e4829816d",
@@ -3979,7 +4009,7 @@
     "bindings.curvePresetLimitTitle": "b33a8e7cbaed93c7eeb49c54b4a12612c7fa20bee0a2520312a3d0f3fea53394",
     "bindings.curvePresetLimitMessage": "1b3c21265d97324dbc5345108e1ea4358e6e45e8726f2a399ed46d5090037911",
     "bindings.feedbackOutput": "18a90388ccba3cfbe9d0b7b37e74ad1239215a09b41c51ecc999486674c97528",
-    "bindings.feedbackOutputHelp": "96764e2359e9d5b72d27eca432f50ab883641f0271493c8e0bebe737052e1199",
+    "bindings.feedbackOutputHelp": "b0ec3a985b218f4d39cc8835ef15895464050dcb43f4c506c3963634fa66d92c",
     "bindings.feedbackMessageType": "122d60a966c83521205723b6dbed144d944bea93e0724cd15442206429e2e0eb",
     "bindings.feedbackChannelLabel": "cf0742ac1ad150bacbf7c980c7f93dc770afb1dfd054615f18b68fde2f47a85f",
     "bindings.feedbackControlLabel": "7ca8405192dd40c79ae4be7e773355f582534b968090ce8af43f7d16c889d8fb",
@@ -4113,7 +4143,13 @@
     "virtualAudio.blockedUnsafeVersion": "858883278e55cfe3ffbeadabc9eb288ed4847d49c9f88f876fd00dfc5a78d6d0",
     "virtualAudio.blockedUnknownVersion": "39529aa8adce738e281f3ba1c1ae94eef99a60be3aba0200058539607a750d1f",
     "virtualAudio.copyDiagnostics": "87a3f848e997fe63746507a102205aa488043077ff797741494d1fadc77cbe6a",
-    "virtualAudio.diagnosticsCopied": "18e9da0fd761b965e5cd4c3e7adcfe7e6fb9f691484c06c98a894c6dea57c077"
+    "virtualAudio.diagnosticsCopied": "18e9da0fd761b965e5cd4c3e7adcfe7e6fb9f691484c06c98a894c6dea57c077",
+    "bindings.ledMode": "8b797e51f1310507dcdfef4cf8dc8db164afe34a3ad5595e454bb0b24e6c18cb",
+    "bindings.ledModeHelp": "e1fdb51d3321ded27e44b28d52acea95e94aa578e23fcd3dde0e8590322e94b1",
+    "bindings.ledFollowValue": "c03c266e971f4a504e7dd0aa4166d73ea6c91fce08d035815b7e63b43747f32f",
+    "bindings.ledMusicReactive": "b65d5988ffa274aafe9411bfd2fa47e5e2437019729c9b64a56293648423a19a",
+    "bindings.ledIntensity": "aa53d5a8931523221e560531cb9fb874ed80c0fe812dcbe151784c669fc50052",
+    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da"
   },
   "pl": {
     "bindings.feedbackDisabled": "75081b593d15cf6e631971bc6768723f593b88b172477e40ae7d363e4829816d",
@@ -4665,7 +4701,7 @@
     "bindings.curvePresetLimitTitle": "b33a8e7cbaed93c7eeb49c54b4a12612c7fa20bee0a2520312a3d0f3fea53394",
     "bindings.curvePresetLimitMessage": "1b3c21265d97324dbc5345108e1ea4358e6e45e8726f2a399ed46d5090037911",
     "bindings.feedbackOutput": "18a90388ccba3cfbe9d0b7b37e74ad1239215a09b41c51ecc999486674c97528",
-    "bindings.feedbackOutputHelp": "96764e2359e9d5b72d27eca432f50ab883641f0271493c8e0bebe737052e1199",
+    "bindings.feedbackOutputHelp": "b0ec3a985b218f4d39cc8835ef15895464050dcb43f4c506c3963634fa66d92c",
     "bindings.feedbackMessageType": "122d60a966c83521205723b6dbed144d944bea93e0724cd15442206429e2e0eb",
     "bindings.feedbackChannelLabel": "cf0742ac1ad150bacbf7c980c7f93dc770afb1dfd054615f18b68fde2f47a85f",
     "bindings.feedbackControlLabel": "7ca8405192dd40c79ae4be7e773355f582534b968090ce8af43f7d16c889d8fb",
@@ -4799,7 +4835,13 @@
     "virtualAudio.blockedUnsafeVersion": "858883278e55cfe3ffbeadabc9eb288ed4847d49c9f88f876fd00dfc5a78d6d0",
     "virtualAudio.blockedUnknownVersion": "39529aa8adce738e281f3ba1c1ae94eef99a60be3aba0200058539607a750d1f",
     "virtualAudio.copyDiagnostics": "87a3f848e997fe63746507a102205aa488043077ff797741494d1fadc77cbe6a",
-    "virtualAudio.diagnosticsCopied": "18e9da0fd761b965e5cd4c3e7adcfe7e6fb9f691484c06c98a894c6dea57c077"
+    "virtualAudio.diagnosticsCopied": "18e9da0fd761b965e5cd4c3e7adcfe7e6fb9f691484c06c98a894c6dea57c077",
+    "bindings.ledMode": "8b797e51f1310507dcdfef4cf8dc8db164afe34a3ad5595e454bb0b24e6c18cb",
+    "bindings.ledModeHelp": "e1fdb51d3321ded27e44b28d52acea95e94aa578e23fcd3dde0e8590322e94b1",
+    "bindings.ledFollowValue": "c03c266e971f4a504e7dd0aa4166d73ea6c91fce08d035815b7e63b43747f32f",
+    "bindings.ledMusicReactive": "b65d5988ffa274aafe9411bfd2fa47e5e2437019729c9b64a56293648423a19a",
+    "bindings.ledIntensity": "aa53d5a8931523221e560531cb9fb874ed80c0fe812dcbe151784c669fc50052",
+    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da"
   },
   "ja": {
     "bindings.feedbackDisabled": "75081b593d15cf6e631971bc6768723f593b88b172477e40ae7d363e4829816d",
@@ -5351,7 +5393,7 @@
     "bindings.curvePresetLimitTitle": "b33a8e7cbaed93c7eeb49c54b4a12612c7fa20bee0a2520312a3d0f3fea53394",
     "bindings.curvePresetLimitMessage": "1b3c21265d97324dbc5345108e1ea4358e6e45e8726f2a399ed46d5090037911",
     "bindings.feedbackOutput": "18a90388ccba3cfbe9d0b7b37e74ad1239215a09b41c51ecc999486674c97528",
-    "bindings.feedbackOutputHelp": "96764e2359e9d5b72d27eca432f50ab883641f0271493c8e0bebe737052e1199",
+    "bindings.feedbackOutputHelp": "b0ec3a985b218f4d39cc8835ef15895464050dcb43f4c506c3963634fa66d92c",
     "bindings.feedbackMessageType": "122d60a966c83521205723b6dbed144d944bea93e0724cd15442206429e2e0eb",
     "bindings.feedbackChannelLabel": "cf0742ac1ad150bacbf7c980c7f93dc770afb1dfd054615f18b68fde2f47a85f",
     "bindings.feedbackControlLabel": "7ca8405192dd40c79ae4be7e773355f582534b968090ce8af43f7d16c889d8fb",
@@ -5485,7 +5527,13 @@
     "virtualAudio.blockedUnsafeVersion": "858883278e55cfe3ffbeadabc9eb288ed4847d49c9f88f876fd00dfc5a78d6d0",
     "virtualAudio.blockedUnknownVersion": "39529aa8adce738e281f3ba1c1ae94eef99a60be3aba0200058539607a750d1f",
     "virtualAudio.copyDiagnostics": "87a3f848e997fe63746507a102205aa488043077ff797741494d1fadc77cbe6a",
-    "virtualAudio.diagnosticsCopied": "18e9da0fd761b965e5cd4c3e7adcfe7e6fb9f691484c06c98a894c6dea57c077"
+    "virtualAudio.diagnosticsCopied": "18e9da0fd761b965e5cd4c3e7adcfe7e6fb9f691484c06c98a894c6dea57c077",
+    "bindings.ledMode": "8b797e51f1310507dcdfef4cf8dc8db164afe34a3ad5595e454bb0b24e6c18cb",
+    "bindings.ledModeHelp": "e1fdb51d3321ded27e44b28d52acea95e94aa578e23fcd3dde0e8590322e94b1",
+    "bindings.ledFollowValue": "c03c266e971f4a504e7dd0aa4166d73ea6c91fce08d035815b7e63b43747f32f",
+    "bindings.ledMusicReactive": "b65d5988ffa274aafe9411bfd2fa47e5e2437019729c9b64a56293648423a19a",
+    "bindings.ledIntensity": "aa53d5a8931523221e560531cb9fb874ed80c0fe812dcbe151784c669fc50052",
+    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da"
   },
   "ko": {
     "bindings.feedbackDisabled": "75081b593d15cf6e631971bc6768723f593b88b172477e40ae7d363e4829816d",
@@ -6037,7 +6085,7 @@
     "bindings.curvePresetLimitTitle": "b33a8e7cbaed93c7eeb49c54b4a12612c7fa20bee0a2520312a3d0f3fea53394",
     "bindings.curvePresetLimitMessage": "1b3c21265d97324dbc5345108e1ea4358e6e45e8726f2a399ed46d5090037911",
     "bindings.feedbackOutput": "18a90388ccba3cfbe9d0b7b37e74ad1239215a09b41c51ecc999486674c97528",
-    "bindings.feedbackOutputHelp": "96764e2359e9d5b72d27eca432f50ab883641f0271493c8e0bebe737052e1199",
+    "bindings.feedbackOutputHelp": "b0ec3a985b218f4d39cc8835ef15895464050dcb43f4c506c3963634fa66d92c",
     "bindings.feedbackMessageType": "122d60a966c83521205723b6dbed144d944bea93e0724cd15442206429e2e0eb",
     "bindings.feedbackChannelLabel": "cf0742ac1ad150bacbf7c980c7f93dc770afb1dfd054615f18b68fde2f47a85f",
     "bindings.feedbackControlLabel": "7ca8405192dd40c79ae4be7e773355f582534b968090ce8af43f7d16c889d8fb",
@@ -6171,7 +6219,13 @@
     "virtualAudio.blockedUnsafeVersion": "858883278e55cfe3ffbeadabc9eb288ed4847d49c9f88f876fd00dfc5a78d6d0",
     "virtualAudio.blockedUnknownVersion": "39529aa8adce738e281f3ba1c1ae94eef99a60be3aba0200058539607a750d1f",
     "virtualAudio.copyDiagnostics": "87a3f848e997fe63746507a102205aa488043077ff797741494d1fadc77cbe6a",
-    "virtualAudio.diagnosticsCopied": "18e9da0fd761b965e5cd4c3e7adcfe7e6fb9f691484c06c98a894c6dea57c077"
+    "virtualAudio.diagnosticsCopied": "18e9da0fd761b965e5cd4c3e7adcfe7e6fb9f691484c06c98a894c6dea57c077",
+    "bindings.ledMode": "8b797e51f1310507dcdfef4cf8dc8db164afe34a3ad5595e454bb0b24e6c18cb",
+    "bindings.ledModeHelp": "e1fdb51d3321ded27e44b28d52acea95e94aa578e23fcd3dde0e8590322e94b1",
+    "bindings.ledFollowValue": "c03c266e971f4a504e7dd0aa4166d73ea6c91fce08d035815b7e63b43747f32f",
+    "bindings.ledMusicReactive": "b65d5988ffa274aafe9411bfd2fa47e5e2437019729c9b64a56293648423a19a",
+    "bindings.ledIntensity": "aa53d5a8931523221e560531cb9fb874ed80c0fe812dcbe151784c669fc50052",
+    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da"
   },
   "zh-Hans": {
     "bindings.feedbackDisabled": "75081b593d15cf6e631971bc6768723f593b88b172477e40ae7d363e4829816d",
@@ -6723,7 +6777,7 @@
     "bindings.curvePresetLimitTitle": "b33a8e7cbaed93c7eeb49c54b4a12612c7fa20bee0a2520312a3d0f3fea53394",
     "bindings.curvePresetLimitMessage": "1b3c21265d97324dbc5345108e1ea4358e6e45e8726f2a399ed46d5090037911",
     "bindings.feedbackOutput": "18a90388ccba3cfbe9d0b7b37e74ad1239215a09b41c51ecc999486674c97528",
-    "bindings.feedbackOutputHelp": "96764e2359e9d5b72d27eca432f50ab883641f0271493c8e0bebe737052e1199",
+    "bindings.feedbackOutputHelp": "b0ec3a985b218f4d39cc8835ef15895464050dcb43f4c506c3963634fa66d92c",
     "bindings.feedbackMessageType": "122d60a966c83521205723b6dbed144d944bea93e0724cd15442206429e2e0eb",
     "bindings.feedbackChannelLabel": "cf0742ac1ad150bacbf7c980c7f93dc770afb1dfd054615f18b68fde2f47a85f",
     "bindings.feedbackControlLabel": "7ca8405192dd40c79ae4be7e773355f582534b968090ce8af43f7d16c889d8fb",
@@ -6857,7 +6911,13 @@
     "virtualAudio.blockedUnsafeVersion": "858883278e55cfe3ffbeadabc9eb288ed4847d49c9f88f876fd00dfc5a78d6d0",
     "virtualAudio.blockedUnknownVersion": "39529aa8adce738e281f3ba1c1ae94eef99a60be3aba0200058539607a750d1f",
     "virtualAudio.copyDiagnostics": "87a3f848e997fe63746507a102205aa488043077ff797741494d1fadc77cbe6a",
-    "virtualAudio.diagnosticsCopied": "18e9da0fd761b965e5cd4c3e7adcfe7e6fb9f691484c06c98a894c6dea57c077"
+    "virtualAudio.diagnosticsCopied": "18e9da0fd761b965e5cd4c3e7adcfe7e6fb9f691484c06c98a894c6dea57c077",
+    "bindings.ledMode": "8b797e51f1310507dcdfef4cf8dc8db164afe34a3ad5595e454bb0b24e6c18cb",
+    "bindings.ledModeHelp": "e1fdb51d3321ded27e44b28d52acea95e94aa578e23fcd3dde0e8590322e94b1",
+    "bindings.ledFollowValue": "c03c266e971f4a504e7dd0aa4166d73ea6c91fce08d035815b7e63b43747f32f",
+    "bindings.ledMusicReactive": "b65d5988ffa274aafe9411bfd2fa47e5e2437019729c9b64a56293648423a19a",
+    "bindings.ledIntensity": "aa53d5a8931523221e560531cb9fb874ed80c0fe812dcbe151784c669fc50052",
+    "bindings.ledIntensityHelp": "e79ded5a0c73e44249bc54203bd1b9bd7a8583377c2089bff61006630c0fc4da"
   },
   "settings.appearance.description": "Customize how MIDIMaster looks and feels.",
   "settings.appearance.themePresets": "Theme Presets",
