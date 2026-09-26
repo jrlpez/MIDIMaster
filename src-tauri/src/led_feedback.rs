@@ -45,23 +45,28 @@ pub fn peak_for_target(target: &BindingTarget, peaks: &AudioPeakLevels) -> f32 {
         BindingTarget::Session { session_id } => {
             peaks.sessions.get(session_id).copied().unwrap_or(0.0)
         }
-        BindingTarget::Application { name, .. } => peaks
-            .session_matches
-            .iter()
-            .filter(|(info, _)| {
-                application_name_matches(
+        BindingTarget::Application { name, .. } => {
+            let mut peak = 0.0_f32;
+            for (info, session_peak) in &peaks.session_matches {
+                if application_name_matches(
                     name,
                     ApplicationMatchInfo {
                         process_path: info.process_path.as_deref(),
                         process_name: info.process_name.as_deref(),
                         display_name: Some(info.display_name.as_str()),
                         application_key: info.application_key.as_deref(),
-                        ..Default::default()
+                        friendly_process_label: None,
+                        humanized_process_name: None,
+                        package_family_name: None,
+                        package_full_name: None,
+                        application_user_model_id: None,
                     },
-                )
-            })
-            .map(|(_, peak)| *peak)
-            .fold(0.0_f32, f32::max),
+                ) {
+                    peak = peak.max(*session_peak);
+                }
+            }
+            peak
+        }
         BindingTarget::Device { device_id } => {
             let (kind, raw_id) = parse_device_target(device_id);
             match kind {

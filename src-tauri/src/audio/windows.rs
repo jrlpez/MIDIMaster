@@ -1083,32 +1083,31 @@ fn get_endpoint_volume(
 }
 
 fn endpoint_peak_value(device: &IMMDevice) -> f32 {
-    let Ok(meter) = (|| -> Result<IAudioMeterInformation> {
-        Ok(unsafe { device.Activate(CLSCTX_ALL, None)? })
-    })() else {
-        return 0.0;
+    let meter: IAudioMeterInformation = match unsafe { device.Activate(CLSCTX_ALL, None) } {
+        Ok(meter) => meter,
+        Err(_) => return 0.0,
     };
-    unsafe { meter.GetPeakValue() }
-        .ok()
-        .map(|value| value.clamp(0.0, 1.0))
-        .unwrap_or(0.0)
+    match unsafe { meter.GetPeakValue() } {
+        Ok(value) => value.clamp(0.0, 1.0),
+        Err(_) => 0.0,
+    }
 }
 
 fn session_peak_value(control: &IAudioSessionControl2, simple: &ISimpleAudioVolume) -> f32 {
-    if unsafe { simple.GetMute() }
-        .ok()
-        .map(|muted| muted.as_bool())
-        .unwrap_or(false)
-    {
+    let muted = unsafe { simple.GetMute() }
+        .map(|value| value.as_bool())
+        .unwrap_or(false);
+    if muted {
         return 0.0;
     }
-    let Ok(meter) = control.cast::<IAudioMeterInformation>() else {
-        return 0.0;
+    let meter: IAudioMeterInformation = match control.cast() {
+        Ok(meter) => meter,
+        Err(_) => return 0.0,
     };
-    unsafe { meter.GetPeakValue() }
-        .ok()
-        .map(|value| value.clamp(0.0, 1.0))
-        .unwrap_or(0.0)
+    match unsafe { meter.GetPeakValue() } {
+        Ok(value) => value.clamp(0.0, 1.0),
+        Err(_) => 0.0,
+    }
 }
 
 fn collect_peak_levels() -> Result<AudioPeakLevels> {
