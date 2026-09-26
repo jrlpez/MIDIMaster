@@ -15,6 +15,7 @@ mod device_target;
 mod durable_json_store;
 mod fader_curve;
 mod feedback;
+mod led_feedback;
 mod midi;
 mod midi_event_queue;
 mod midi_reconciliation;

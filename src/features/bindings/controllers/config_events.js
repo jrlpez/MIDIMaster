@@ -52,6 +52,7 @@ export function createConfigEvents({
   updateCustomCurveFromPointer,
   updateFeedbackOutputFromFields,
   updateIndicatorFromFields,
+  updateLedIntensityFromInput,
   updateMacroDrag,
 }) {
   function bindConfigModalUi() {
@@ -82,6 +83,13 @@ export function createConfigEvents({
         selectEl: elements.bindingConfigFeedbackMsgType,
         rootClass: "binding-config-light-dropdown settings-select-dropdown",
         title: t("bindings.feedbackMessageType"),
+      });
+    }
+    if (elements.bindingConfigLedModeSelect && !listState.ledModeDropdown) {
+      listState.ledModeDropdown = createSelectDropdownShell({
+        selectEl: elements.bindingConfigLedModeSelect,
+        rootClass: "binding-config-light-dropdown settings-select-dropdown",
+        title: t("bindings.ledMode"),
       });
     }
     renderIndicatorDropdowns();
@@ -124,18 +132,50 @@ export function createConfigEvents({
         const nextMode = elements.bindingConfigButtonLightSelect.value;
         if (nextMode === "Disabled") {
           binding.feedback_enabled = false;
+          binding.led_feedback_mode = "FollowValue";
+        } else if (nextMode === "AudioReactive") {
+          binding.feedback_enabled = true;
+          binding.led_feedback_mode = "AudioReactive";
+          if (binding.led_intensity == null) binding.led_intensity = 1;
         } else if (nextMode === "MappedWhenAssigned") {
           binding.feedback_enabled = true;
+          binding.led_feedback_mode = "FollowValue";
           binding.button_light_mode = "MappedWhenAssigned";
           binding.button_light_behavior = normalizeButtonLightBehavior(binding.button_light_behavior);
         } else {
           binding.feedback_enabled = true;
+          binding.led_feedback_mode = "FollowValue";
           binding.button_light_mode = "Activity";
           binding.button_light_behavior = normalizeButtonLightBehavior(nextMode);
         }
         syncButtonLightUi(binding);
         updateAuxLearnUi();
         renderConfigPreview();
+      });
+    }
+    if (elements.bindingConfigLedModeSelect) {
+      lifetime.listen(elements.bindingConfigLedModeSelect, "change", () => {
+        const binding = getConfigBinding();
+        if (!binding) return;
+        binding.led_feedback_mode =
+          elements.bindingConfigLedModeSelect.value === "AudioReactive" ? "AudioReactive" : "FollowValue";
+        if (binding.led_feedback_mode === "AudioReactive" && binding.feedback_enabled === false) {
+          binding.feedback_enabled = true;
+        }
+        if (binding.led_intensity == null) binding.led_intensity = 1;
+        syncFeedbackOutputUi(binding);
+        updateAuxLearnUi();
+        renderConfigPreview();
+      });
+    }
+    if (elements.bindingConfigLedIntensity) {
+      lifetime.listen(elements.bindingConfigLedIntensity, "input", () => {
+        updateLedIntensityFromInput(elements.bindingConfigLedIntensity);
+      });
+    }
+    if (elements.bindingConfigFeedbackLedIntensity) {
+      lifetime.listen(elements.bindingConfigFeedbackLedIntensity, "input", () => {
+        updateLedIntensityFromInput(elements.bindingConfigFeedbackLedIntensity);
       });
     }
     lifetime.listen(elements.bindingConfigIndicatorMsgType, "change", updateIndicatorFromFields);

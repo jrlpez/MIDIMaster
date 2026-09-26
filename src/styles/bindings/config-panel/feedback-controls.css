@@ -178,6 +178,30 @@
   }
 }
 
+.binding-config-led-intensity-row {
+  margin-top: 10px;
+}
+
+.binding-config-led-intensity-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: min(180px, 42vw);
+}
+
+.binding-config-led-intensity-control input[type="range"] {
+  width: min(120px, 28vw);
+  accent-color: #7eb6ff;
+}
+
+.binding-config-led-intensity-control strong {
+  min-width: 3.2em;
+  text-align: right;
+  color: #e3eeff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
 .binding-config-light-dropdown {
   width: min(180px, 42vw);
   min-width: 150px;

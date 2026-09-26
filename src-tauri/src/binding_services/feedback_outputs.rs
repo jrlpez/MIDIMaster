@@ -11,6 +11,24 @@ pub(super) fn send_resolved_binding_feedback(
     if !binding.feedback_enabled {
         return;
     }
+    if binding.uses_audio_reactive_led() {
+        if binding.is_button_binding() {
+            return;
+        }
+        if binding.custom_feedback_output_control().is_some() {
+            feedback::send_feedback_to_control(
+                state,
+                &FeedbackControlKey::from_binding(binding),
+                FeedbackSendOptions {
+                    value,
+                    silent,
+                    force_hardware_feedback,
+                    context,
+                },
+            );
+        }
+        return;
+    }
     if binding.is_button_binding() {
         feedback::send_button_light_feedback_to_binding(
             state,

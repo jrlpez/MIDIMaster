@@ -684,5 +684,11 @@
   "bindings.buttonLightWhenMapped": "Cuando está asignado",
   "bindings.buttonLightWhenOn": "Cuando está activado",
   "bindings.buttonLightWhenOff": "Cuando está desactivado",
-  "bindings.buttonLightWhilePressed": "Mientras se pulsa"
+  "bindings.buttonLightWhilePressed": "Mientras se pulsa",
+  "bindings.ledMode": "LED mode",
+  "bindings.ledModeHelp": "Follow the fader value, or pulse the light with the bound audio level.",
+  "bindings.ledFollowValue": "Follow Value",
+  "bindings.ledMusicReactive": "Music Reactive",
+  "bindings.ledIntensity": "LED intensity",
+  "bindings.ledIntensityHelp": "How strongly the light reacts to audio peaks."
 }

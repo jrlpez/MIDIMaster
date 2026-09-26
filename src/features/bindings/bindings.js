@@ -373,6 +373,7 @@ export function createBindingsFeature({
     syncFeedbackOutputUi,
     updateIndicatorFromFields,
     updateFeedbackOutputFromFields,
+    updateLedIntensityFromInput,
   } = createFeedbackEditor({
     elements,
     editorState,
@@ -780,6 +781,7 @@ export function createBindingsFeature({
     updateCustomCurveFromPointer,
     updateFeedbackOutputFromFields,
     updateIndicatorFromFields,
+    updateLedIntensityFromInput,
     updateMacroDrag,
   });
 

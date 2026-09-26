@@ -1,4 +1,22 @@
 use crate::model::SessionInfo;
+use std::collections::HashMap;
+
+#[derive(Debug, Clone, Default)]
+pub struct SessionPeakIdentity {
+    pub display_name: String,
+    pub application_key: Option<String>,
+    pub process_name: Option<String>,
+    pub process_path: Option<String>,
+}
+
+#[derive(Debug, Clone, Default)]
+pub struct AudioPeakLevels {
+    pub master: f32,
+    pub devices: HashMap<String, f32>,
+    pub sessions: HashMap<String, f32>,
+    pub focused_session_id: Option<String>,
+    pub session_matches: Vec<(SessionPeakIdentity, f32)>,
+}
 
 pub trait AudioBackend: Send + Sync {
     fn list_sessions(&self) -> anyhow::Result<Vec<SessionInfo>>;
@@ -15,6 +33,9 @@ pub trait AudioBackend: Send + Sync {
     fn focused_session(&self) -> anyhow::Result<Option<SessionInfo>>;
     fn focused_session_state(&self) -> anyhow::Result<Option<SessionInfo>> {
         self.focused_session()
+    }
+    fn peak_levels(&self) -> anyhow::Result<AudioPeakLevels> {
+        Ok(AudioPeakLevels::default())
     }
 
     // Mute methods

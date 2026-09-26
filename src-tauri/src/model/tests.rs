@@ -640,6 +640,25 @@ fn deserialize_binding_defaults_mute_behavior_to_toggle_on_press() {
 }
 
 #[test]
+fn deserialize_binding_defaults_led_feedback_mode_to_follow_value() {
+    let binding: Binding =
+        serde_json::from_value(binding_base_json()).expect("binding should deserialize");
+    assert_eq!(binding.led_feedback_mode, LedFeedbackMode::FollowValue);
+    assert!((binding.led_intensity - 1.0).abs() < f32::EPSILON);
+    assert!(!binding.uses_audio_reactive_led());
+}
+
+#[test]
+fn audio_reactive_led_uses_intensity_clamp() {
+    let mut binding: Binding =
+        serde_json::from_value(binding_base_json()).expect("binding should deserialize");
+    binding.led_feedback_mode = LedFeedbackMode::AudioReactive;
+    binding.led_intensity = 3.5;
+    assert!(binding.uses_audio_reactive_led());
+    assert!((binding.normalized_led_intensity() - 2.0).abs() < f32::EPSILON);
+}
+
+#[test]
 fn deserialize_binding_defaults_button_light_mode_to_activity() {
     let binding: Binding =
         serde_json::from_value(binding_base_json()).expect("binding should deserialize");

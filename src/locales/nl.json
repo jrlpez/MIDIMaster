@@ -684,5 +684,11 @@
   "bindings.buttonLightWhenMapped": "Bij toewijzing",
   "bindings.buttonLightWhenOn": "Wanneer aan",
   "bindings.buttonLightWhenOff": "Wanneer uit",
-  "bindings.buttonLightWhilePressed": "Tijdens indrukken"
+  "bindings.buttonLightWhilePressed": "Tijdens indrukken",
+  "bindings.ledMode": "LED mode",
+  "bindings.ledModeHelp": "Follow the fader value, or pulse the light with the bound audio level.",
+  "bindings.ledFollowValue": "Follow Value",
+  "bindings.ledMusicReactive": "Music Reactive",
+  "bindings.ledIntensity": "LED intensity",
+  "bindings.ledIntensityHelp": "How strongly the light reacts to audio peaks."
 }

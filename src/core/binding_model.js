@@ -535,5 +535,8 @@ export function normalizeButtonLightFields(binding) {
     binding.button_light_mode = "Activity";
     binding.button_light_behavior = normalizeButtonLightBehavior(binding.button_light_behavior);
   }
+  binding.led_feedback_mode = binding.led_feedback_mode === "AudioReactive" ? "AudioReactive" : "FollowValue";
+  const intensity = Number(binding.led_intensity);
+  binding.led_intensity = Number.isFinite(intensity) ? Math.min(2, Math.max(0, intensity)) : 1;
   return binding;
 }

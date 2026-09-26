@@ -1,5 +1,5 @@
 use crate::audio::target_match::{application_name_matches, ApplicationMatchInfo};
-use crate::audio::AudioBackend;
+use crate::audio::{AudioBackend, AudioPeakLevels, SessionPeakIdentity};
 use crate::device_target::{parse_device_target, DeviceTargetKind};
 use crate::model::{PlaybackDeviceInfo, SessionInfo};
 use anyhow::{anyhow, Result};
@@ -11,7 +11,7 @@ use std::sync::{Mutex, OnceLock};
 use std::time::{Duration, Instant};
 use windows::core::{IUnknown_Vtbl, Interface, GUID, HRESULT, PCWSTR};
 use windows::Win32::Foundation::{PROPERTYKEY, RPC_E_CHANGED_MODE};
-use windows::Win32::Media::Audio::Endpoints::IAudioEndpointVolume;
+use windows::Win32::Media::Audio::Endpoints::{IAudioEndpointVolume, IAudioMeterInformation};
 use windows::Win32::Media::Audio::{
     eCapture, eCommunications, eConsole, eMultimedia, eRender, EDataFlow, ERole,
     IAudioSessionControl2, IAudioSessionManager2, IMMDevice, IMMDeviceEnumerator,
@@ -206,6 +206,10 @@ impl AudioBackend for WindowsAudioBackend {
 
     fn list_session_states(&self) -> Result<Vec<SessionInfo>> {
         list_sessions_with_visuals(false)
+    }
+
+    fn peak_levels(&self) -> Result<AudioPeakLevels> {
+        collect_peak_levels()
     }
 
     fn list_playback_devices(&self) -> Result<Vec<PlaybackDeviceInfo>> {
@@ -1076,6 +1080,144 @@ fn get_endpoint_volume(
 ) -> Result<IAudioEndpointVolume> {
     let endpoint: IAudioEndpointVolume = unsafe { device.Activate(CLSCTX_ALL, None) }?;
     Ok(endpoint)
+}
+
+fn endpoint_peak_value(device: &IMMDevice) -> f32 {
+    let Ok(meter) = (|| -> Result<IAudioMeterInformation> {
+        Ok(unsafe { device.Activate(CLSCTX_ALL, None)? })
+    })() else {
+        return 0.0;
+    };
+    unsafe { meter.GetPeakValue() }
+        .ok()
+        .map(|value| value.clamp(0.0, 1.0))
+        .unwrap_or(0.0)
+}
+
+fn session_peak_value(control: &IAudioSessionControl2, simple: &ISimpleAudioVolume) -> f32 {
+    if unsafe { simple.GetMute() }
+        .ok()
+        .map(|muted| muted.as_bool())
+        .unwrap_or(false)
+    {
+        return 0.0;
+    }
+    let Ok(meter) = control.cast::<IAudioMeterInformation>() else {
+        return 0.0;
+    };
+    unsafe { meter.GetPeakValue() }
+        .ok()
+        .map(|value| value.clamp(0.0, 1.0))
+        .unwrap_or(0.0)
+}
+
+fn collect_peak_levels() -> Result<AudioPeakLevels> {
+    let _com = init_com()?;
+    let enumerator = get_device_enumerator()?;
+    let default_device = get_default_device_from(&enumerator)?;
+    let default_device_id = device_id_string(&default_device);
+    let master = endpoint_peak_value(&default_device);
+
+    let mut devices = HashMap::new();
+    for (device, device_id) in enumerate_active_devices(&enumerator, eRender)? {
+        devices.insert(device_id, endpoint_peak_value(&device));
+    }
+
+    let mut sessions = HashMap::new();
+    let mut session_matches = Vec::new();
+    let mut seen_ids = HashSet::new();
+
+    for (device, device_id) in enumerate_active_devices(&enumerator, eRender)? {
+        let _ = visit_audio_sessions::<()>(&device, |control2, simple, process_id| {
+            let base_id = session_identifier(control2, process_id)
+                .unwrap_or_else(|| format!("pid:{}", process_id));
+            let session_id = if default_device_id.as_deref() == Some(device_id.as_str()) {
+                base_id
+            } else {
+                format!("{}|{}", device_id, base_id)
+            };
+            if !seen_ids.insert(session_id.clone()) {
+                return Ok(SessionVisit::Continue);
+            }
+
+            let peak = session_peak_value(control2, simple);
+            let identity = query_effective_process_identity_cached(process_id);
+            let process_path = identity.path.clone();
+            let process_name = process_path
+                .as_ref()
+                .and_then(|path| Path::new(path).file_name())
+                .and_then(|name| name.to_str())
+                .map(|name| name.to_string());
+            let raw_display_name = unsafe { control2.GetDisplayName() }
+                .ok()
+                .and_then(owned_pwstr_to_string);
+            let display_name = session_display_name(raw_display_name.as_deref());
+            let application_key = stable_application_key(
+                &identity,
+                process_path.as_deref(),
+                process_name.as_deref(),
+                display_name.as_deref(),
+            );
+            let friendly_name = friendly_session_name(
+                display_name.as_deref(),
+                process_path.as_deref(),
+                process_name.as_deref(),
+                &identity,
+            );
+
+            if should_skip_session(
+                process_id,
+                &display_name,
+                &process_name,
+                &process_path,
+                &friendly_name,
+                &application_key,
+                &identity,
+            ) {
+                return Ok(SessionVisit::Continue);
+            }
+
+            sessions.insert(session_id, peak);
+            session_matches.push((
+                SessionPeakIdentity {
+                    display_name: friendly_name,
+                    application_key,
+                    process_name,
+                    process_path,
+                },
+                peak,
+            ));
+            Ok(SessionVisit::Continue)
+        });
+    }
+
+    let focused_session_id = focused_session_peak_id(&default_device, default_device_id.as_deref());
+
+    Ok(AudioPeakLevels {
+        master,
+        devices,
+        sessions,
+        focused_session_id,
+        session_matches,
+    })
+}
+
+fn focused_session_peak_id(default_device: &IMMDevice, default_device_id: Option<&str>) -> Option<String> {
+    let process_id = foreground_process_id()?;
+    let identity = query_effective_process_identity_cached(process_id);
+    let device_id = default_device_id?;
+    session_info_for_process(
+        default_device,
+        device_id,
+        Some(device_id),
+        process_id,
+        &identity,
+        &mut HashMap::new(),
+        false,
+    )
+    .ok()
+    .flatten()
+    .map(|session| session.id)
 }
 
 fn get_session_manager(

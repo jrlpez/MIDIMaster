@@ -17,6 +17,17 @@ MIDIMaster binds controls on your MIDI device (faders, knobs, buttons) to target
 
 When a target changes, MIDIMaster can send feedback back to your MIDI controller (for motorized faders, LEDs, etc.).
 
+### Music-reactive LEDs
+
+For fader and button bindings, you can switch LED feedback to **Music Reactive** mode:
+
+1. Open the binding configuration.
+2. For faders/knobs, set **LED mode** to **Music Reactive**. For buttons, choose **Music Reactive** in the button light list.
+3. Adjust **LED intensity** so quiet audio stays dim and louder peaks flash brighter.
+4. Optionally learn or type a custom Note/CC/Pitch Bend address for the LED output (already supported under Feedback output / Indicator output).
+
+In Music Reactive mode the light follows live audio peaks for the bound target (master, device, application, session, or focused app). Quiet passages stay dark; louder beats drive brighter pulses. If a fader also has a custom LED address, motor fader position feedback still updates the primary control while the LED address receives the reactive signal.
+
 ## First-Time Setup
 
 ### 1) Configure MIDI Routes

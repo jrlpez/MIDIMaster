@@ -1,5 +1,5 @@
 use crate::bindings::BindingKey;
-use crate::feedback;
+use crate::feedback::{self, FeedbackControlKey};
 use crate::midi_event_queue::log_queue_stats;
 use crate::model::{BindingTarget, Profile, SessionInfo};
 use crate::run_logger;
@@ -16,6 +16,7 @@ use tokio::time::sleep;
 const MIDI_QUEUE_BATCH_DELAY: Duration = Duration::from_millis(4);
 const FEEDBACK_SYNC_INTERVAL: Duration = Duration::from_millis(750);
 const FOCUS_FEEDBACK_SYNC_INTERVAL: Duration = Duration::from_millis(250);
+const AUDIO_REACTIVE_LED_INTERVAL: Duration = Duration::from_millis(40);
 const FULL_FEEDBACK_RESEND_INTERVAL: Duration = Duration::from_secs(10);
 const LEARN_COMMIT_CHECK_INTERVAL: Duration = Duration::from_millis(25);
 const OSD_HIDE_CHECK_INTERVAL: Duration = Duration::from_millis(100);
@@ -74,6 +75,13 @@ fn profile_has_focus_target(profile: &crate::model::Profile) -> bool {
             .iter()
             .any(|target| matches!(target, BindingTarget::Focus))
     })
+}
+
+fn profile_has_audio_reactive_led(profile: &crate::model::Profile) -> bool {
+    profile
+        .bindings
+        .iter()
+        .any(|binding| binding.uses_audio_reactive_led())
 }
 
 fn feedback_context_signature(profile: &Profile, active_routes: Vec<(String, String)>) -> String {
@@ -253,6 +261,10 @@ pub(crate) fn spawn_feedback_refresh_loop(
             .unwrap_or_else(Instant::now);
         let mut last_feedback_context = String::new();
         let mut last_sent_feedback: HashMap<BindingKey, f32> = HashMap::new();
+        let mut last_reactive_led_sync = Instant::now()
+            .checked_sub(AUDIO_REACTIVE_LED_INTERVAL)
+            .unwrap_or_else(Instant::now);
+        let mut reactive_led_levels: HashMap<BindingKey, f32> = HashMap::new();
 
         loop {
             if shutdown_requested(&shutdown) {
@@ -303,6 +315,10 @@ pub(crate) fn spawn_feedback_refresh_loop(
                 .ok()
                 .and_then(|profile| profile.clone());
             let profile_active = profile.is_some();
+            let has_audio_reactive_led = profile
+                .as_ref()
+                .map(profile_has_audio_reactive_led)
+                .unwrap_or(false);
             if let Some(profile) = profile.as_ref() {
                 let sync_interval = if profile_has_focus_target(profile) {
                     FOCUS_FEEDBACK_SYNC_INTERVAL
@@ -323,6 +339,7 @@ pub(crate) fn spawn_feedback_refresh_loop(
                     if context_changed {
                         last_feedback_context = context;
                         last_sent_feedback.clear();
+                        reactive_led_levels.clear();
                     }
 
                     let force_feedback_resend = context_changed
@@ -352,20 +369,43 @@ pub(crate) fn spawn_feedback_refresh_loop(
                             let key = BindingKey::from_binding(binding);
                             if binding.feedback_enabled {
                                 if let Some(volume) = feedback_snapshot.get(&key).cloned() {
-                                    let output_key =
-                                        feedback::binding_feedback_control_key(binding)
-                                            .to_binding_key();
-                                    if should_send_feedback(
-                                        &mut last_sent_feedback,
-                                        output_key,
-                                        volume,
-                                        force_feedback_resend,
-                                    ) {
-                                        if binding.is_button_binding() {
-                                            let _ =
-                                                midi.send_binding_light_feedback(binding, volume);
-                                        } else {
-                                            let _ = midi.send_binding_feedback(binding, volume);
+                                    if binding.uses_audio_reactive_led() {
+                                        if !binding.is_button_binding()
+                                            && binding.custom_feedback_output_control().is_some()
+                                        {
+                                            let primary_key = FeedbackControlKey::from_binding(binding)
+                                                .to_binding_key();
+                                            if should_send_feedback(
+                                                &mut last_sent_feedback,
+                                                primary_key,
+                                                volume,
+                                                force_feedback_resend,
+                                            ) {
+                                                let _ = midi.send_feedback(
+                                                    &binding.device_id,
+                                                    binding.control.channel,
+                                                    binding.control.controller,
+                                                    volume,
+                                                    binding.control.msg_type.clone(),
+                                                );
+                                            }
+                                        }
+                                    } else {
+                                        let output_key =
+                                            feedback::binding_feedback_control_key(binding)
+                                                .to_binding_key();
+                                        if should_send_feedback(
+                                            &mut last_sent_feedback,
+                                            output_key,
+                                            volume,
+                                            force_feedback_resend,
+                                        ) {
+                                            if binding.is_button_binding() {
+                                                let _ = midi
+                                                    .send_binding_light_feedback(binding, volume);
+                                            } else {
+                                                let _ = midi.send_binding_feedback(binding, volume);
+                                            }
                                         }
                                     }
                                 }
@@ -392,10 +432,44 @@ pub(crate) fn spawn_feedback_refresh_loop(
                         }
                     }
                 }
+
+                if has_audio_reactive_led
+                    && last_reactive_led_sync.elapsed() >= AUDIO_REACTIVE_LED_INTERVAL
+                {
+                    last_reactive_led_sync = loop_started;
+                    let peaks = crate::led_feedback::collect_audio_peaks(state.audio.as_ref());
+                    if let Ok(mut midi) = state.midi.lock() {
+                        for binding in &profile.bindings {
+                            let output_control =
+                                feedback::binding_feedback_control_key(binding);
+                            let output_key = output_control.to_binding_key();
+                            let previous = reactive_led_levels.get(&output_key).copied().unwrap_or(0.0);
+                            let Some(level) = crate::led_feedback::reactive_led_level_for_binding(
+                                binding, &peaks, previous,
+                            ) else {
+                                continue;
+                            };
+                            reactive_led_levels.insert(output_key.clone(), level);
+                            if should_send_feedback(
+                                &mut last_sent_feedback,
+                                output_key,
+                                level,
+                                false,
+                            ) {
+                                if binding.is_button_binding() {
+                                    let _ = midi.send_binding_light_feedback(binding, level);
+                                } else {
+                                    let _ = midi.send_binding_feedback(binding, level);
+                                }
+                            }
+                        }
+                    }
+                }
             } else {
                 last_focused_session = None;
                 last_feedback_context.clear();
                 last_sent_feedback.clear();
+                reactive_led_levels.clear();
             }
 
             if last_osd_hide_check.elapsed() >= OSD_HIDE_CHECK_INTERVAL {
@@ -453,6 +527,8 @@ pub(crate) fn spawn_feedback_refresh_loop(
 
             let next_sleep = if learn_active {
                 LEARN_COMMIT_CHECK_INTERVAL
+            } else if has_audio_reactive_led {
+                AUDIO_REACTIVE_LED_INTERVAL
             } else if osd_active {
                 OSD_HIDE_CHECK_INTERVAL
             } else if active_profile_has_focus_target {
